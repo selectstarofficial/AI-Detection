@@ -30,7 +30,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_def", type=str, default="config/yolov3.cfg", help="path to model definition file")
     parser.add_argument("--data_config", type=str, default="config/coco.data", help="path to data config file")
     parser.add_argument("--pretrained_weights", type=str, help="if specified starts from checkpoint model")
-    parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
+    parser.add_argument("--n_cpu", type=int, default=4, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
     parser.add_argument("--checkpoint_interval", type=int, default=1, help="interval between saving model weights")
     parser.add_argument("--evaluation_interval", type=int, default=1, help="interval evaluations on validation set")
@@ -72,6 +72,10 @@ if __name__ == "__main__":
         num_workers=opt.n_cpu,
         pin_memory=True,
         collate_fn=dataset.collate_fn,
+    )
+    valid_dataset = ListDataset(valid_path, img_size=opt.img_size, augment=False, multiscale=False)
+    valid_dataloader = torch.utils.data.DataLoader(
+        valid_dataset, batch_size=opt.batch_size, shuffle=False, num_workers=1, collate_fn=valid_dataset.collate_fn
     )
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -151,7 +155,6 @@ if __name__ == "__main__":
             log_str += f"\n---- ETA {time_left}"
 
             os.system('cls' if os.name == 'nt' else 'clear')
-
             print(log_str)
 
             model.seen += imgs.size(0)
@@ -161,7 +164,7 @@ if __name__ == "__main__":
             # Evaluate the model on the validation set
             precision, recall, AP, f1, ap_class = evaluate(
                 model,
-                path=valid_path,
+                dataloader=valid_dataloader,
                 iou_thres=0.5,
                 conf_thres=0.5,
                 nms_thres=0.5,
@@ -178,11 +181,19 @@ if __name__ == "__main__":
 
             # Print class APs and mAP
             ap_table = [["Index", "Class name", "AP"]]
-            print(AP)
             for i, c in enumerate(ap_class):
                 ap_table += [[c, class_names[c], "%.5f" % AP[i]]]
             # print(AsciiTable(ap_table).table)
+
+            log_str = "\n"
+            for row in ap_table:
+                for col in row:
+                    log_str += f'{col}\t'
+                log_str += '\n'
+            log_str += f"\nTotal loss {loss.item()}"
             print(f"---- mAP {AP.mean()}")
+
+            print(log_str)
 
         if epoch % opt.checkpoint_interval == 0:
             torch.save(model.state_dict(), f"checkpoints/yolov3_ckpt_%d.pth" % epoch)

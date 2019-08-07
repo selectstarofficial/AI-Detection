@@ -20,20 +20,16 @@ from torch.autograd import Variable
 import torch.optim as optim
 
 
-def evaluate(model, path, iou_thres, conf_thres, nms_thres, img_size, batch_size):
+def evaluate(model, dataloader, iou_thres, conf_thres, nms_thres, img_size, batch_size):
     model.eval()
-
-    # Get dataloader
-    dataset = ListDataset(path, img_size=img_size, augment=False, multiscale=False)
-    dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=batch_size, shuffle=False, num_workers=1, collate_fn=dataset.collate_fn
-    )
 
     Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
 
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
+        if batch_i == 10:
+            break
 
         # Extract labels
         labels += targets[:, 1].tolist()
