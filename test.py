@@ -28,9 +28,6 @@ def evaluate(model, dataloader, iou_thres, conf_thres, nms_thres, img_size, batc
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
-        if batch_i == 10:
-            break
-
         # Extract labels
         labels += targets[:, 1].tolist()
         # Rescale target
@@ -55,14 +52,14 @@ def evaluate(model, dataloader, iou_thres, conf_thres, nms_thres, img_size, batc
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--batch_size", type=int, default=8, help="size of each image batch")
-    parser.add_argument("--model_def", type=str, default="config/yolov3.cfg", help="path to model definition file")
-    parser.add_argument("--data_config", type=str, default="config/coco.data", help="path to data config file")
-    parser.add_argument("--weights_path", type=str, default="weights/yolov3.weights", help="path to weights file")
-    parser.add_argument("--class_path", type=str, default="data/coco.names", help="path to class label file")
+    parser.add_argument("--model_def", type=str, default="config/yolov3-custom.cfg", help="path to model definition file")
+    parser.add_argument("--data_config", type=str, default="config/custom.data", help="path to data config file")
+    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_50.pth", help="path to weights file")
+    parser.add_argument("--class_path", type=str, default="data/custom/classes.names", help="path to class label file")
     parser.add_argument("--iou_thres", type=float, default=0.5, help="iou threshold required to qualify as detected")
     parser.add_argument("--conf_thres", type=float, default=0.001, help="object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.5, help="iou thresshold for non-maximum suppression")
-    parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
+    parser.add_argument("--n_cpu", type=int, default=4, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
     opt = parser.parse_args()
     print(opt)
@@ -72,6 +69,11 @@ if __name__ == "__main__":
     data_config = parse_data_config(opt.data_config)
     valid_path = data_config["valid"]
     class_names = load_classes(data_config["names"])
+    
+    valid_dataset = ListDataset(valid_path, img_size=opt.img_size, augment=False, multiscale=False)
+    valid_dataloader = torch.utils.data.DataLoader(
+        valid_dataset, batch_size=opt.batch_size, shuffle=False, num_workers=1, collate_fn=valid_dataset.collate_fn
+    )
 
     # Initiate model
     model = Darknet(opt.model_def).to(device)
@@ -86,12 +88,12 @@ if __name__ == "__main__":
 
     precision, recall, AP, f1, ap_class = evaluate(
         model,
-        path=valid_path,
+        valid_dataloader,
         iou_thres=opt.iou_thres,
         conf_thres=opt.conf_thres,
         nms_thres=opt.nms_thres,
         img_size=opt.img_size,
-        batch_size=8,
+        batch_size=opt.batch_size,
     )
 
     print("Average Precisions:")
