@@ -13,7 +13,7 @@ class LicensePlateDetector:
         root = os.path.dirname(os.path.realpath(__file__))
         self.weight_path = os.path.join(root, 'checkpoints', 'yolov3_ckpt_50.pth')
         self.model_cfg = os.path.join(root, 'config', 'yolov3-custom.cfg')
-        self.class_pth = os.path.join(root, 'config', 'classes.names')
+        self.class_pth = os.path.join(root, 'config', 'classes.names')  # TODO add classes names file from cloud
         self.img_size = 416
 
         # Load Model
@@ -27,7 +27,8 @@ class LicensePlateDetector:
         self.model.eval()
 
         # Load Classes Info
-        self.classes = load_classes(self.)
+        # TODO load classes path
+        self.classes = load_classes()
 
     def detect(self):
         pass
