@@ -1,8 +1,8 @@
 from __future__ import division
 
-from license_plate.models import *
-from license_plate.utils.utils import *
-from license_plate.utils.datasets import *
+from license_plate_api.models import *
+from license_plate_api.utils.utils import *
+from license_plate_api.utils.datasets import *
 
 import argparse
 import tqdm

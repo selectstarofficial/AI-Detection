@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-from license_plate.utils.utils import build_targets, to_cpu
+from license_plate_api.utils.utils import build_targets, to_cpu
 
 
 def create_modules(module_defs):
