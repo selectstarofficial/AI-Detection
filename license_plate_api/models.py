@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
+from license_plate_api.utils.parse_config import *
 from license_plate_api.utils.utils import build_targets, to_cpu
 
 
