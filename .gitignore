@@ -1,14 +1,1 @@
-data/*
-.DS_Store
-build
-.git
-*.egg-info
-dist
-output
-data/coco
-backup
-weights/*
-__pycache__
-checkpoints
 .idea/
-logs/*
