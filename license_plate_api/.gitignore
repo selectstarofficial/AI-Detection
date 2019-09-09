@@ -10,4 +10,4 @@ backup
 weights/*
 __pycache__
 .idea/
-logs/*
+logs/*~
