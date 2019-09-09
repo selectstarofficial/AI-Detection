@@ -9,6 +9,5 @@ data/coco
 backup
 weights/*
 __pycache__
-checkpoints/*.pth
 .idea/
 logs/*
