@@ -8,6 +8,7 @@ if __name__ == '__main__':
     root = os.path.dirname(os.path.realpath(__file__))
     root = os.path.join(root, "test_photos")
     
+    api = IntegratedApi()
     images = [f for f in os.listdir(root) if f.endswith(".jpg")]
     for image_path in images:
         image_path = os.path.join(root, image_path)
@@ -17,7 +18,6 @@ if __name__ == '__main__':
         cv2.destroyAllWindows()
 
         # Inference
-        api = IntegratedApi()
         masked_image = api.mask(image, show_boundary=False)
 
         cv2.imshow('inferenced', masked_image)
