@@ -11,3 +11,4 @@ weights/*
 __pycache__
 .idea/
 logs/*~
+*.pth
