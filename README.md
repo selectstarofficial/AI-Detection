@@ -4,18 +4,18 @@
 ## Usage
 1. Import api
 
-'''python
+```python
 from api import IntegratedApi
 
 api = IntegratedApi()
-'''
+```
 
 2. Generate Masked Image
 
-'''python
+```python
 import cv2
 
 image_path = "..."
 base_image = cv2.imread(image_path)
 masked_image = api.mask(base_image)
-'''
+```
