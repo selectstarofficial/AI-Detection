@@ -6,7 +6,7 @@ from PIL import Image
 import torch
 import torch.nn.functional as F
 
-from license_plate_api.utils.augmentations import horisontal_flip
+from utils.augmentations import horisontal_flip
 from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 

@@ -6,6 +6,7 @@ import abc
 from glob import glob
 import random
 import PIL.Image
+import shutil
 
 """
 XML sample
@@ -20,12 +21,15 @@ XML sample
 """
 
 CLASSES = {
-    'car_plate' : 0
+    'car_plate': 0
 }
 
 LABELS_GLOB_PATTERN = '/mnt/hdd/Workspaces/Work/Data/number_plate/**/*.xml'
 IMAGES_SEARCH_ROOT = '/mnt/hdd/Workspaces/Work/Data/number_plate_org'
-OUTPUT_DIR = '/mnt/hdd/Workspaces/Work/AI-Detection/data/custom'
+
+OUTPUT = 'data/custom'
+
+all_class_list = []  # for prevent duplicated warnings
 
 
 class BBox:
@@ -38,7 +42,11 @@ class BBox:
             self.class_id = CLASSES[class_name]
         else:
             self.class_id = None
-            print(f"{class_name} is not in CLASSES dict.")
+            if class_name not in all_class_list:
+                print(f"{class_name} is not in CLASSES dict.")
+
+        if class_name not in all_class_list:
+            all_class_list.append(class_name)
 
         assert 0 <= x1 <= 1 and 0 <= y1 <= 1 and 0 <= x2 <= 1 and 0 <= y2 <= 1, "Each position should be normalized to 0.0~1.0"
 
@@ -51,7 +59,7 @@ class BBox:
 class Image:
     def __init__(self, image_name: str, is_train: bool, image_path: str = None, bbox_list: list = None):
         self.image_name = image_name  # Should be full name with extension
-        self.image_path_org = image_path  # This will be later searched at once
+        self.image_path = image_path  # This will be later searched at once
         self.bbox_list = [] if bbox_list is None else bbox_list
         self.is_train = is_train
 
@@ -153,6 +161,8 @@ class Converter:
                 y2 = ybr / height
 
                 _bbox = BBox(label, x1, y1, x2, y2)
+                if _bbox.class_id is None:
+                    continue
                 _image.append(_bbox)
 
             image_list.append(_image)
@@ -161,15 +171,16 @@ class Converter:
 
     @staticmethod
     def write_img(from_img, to_img):
-        pil_img = PIL.Image.open(from_img).convert('RGB')
-        pil_img.save(to_img)
+        # pil_img = PIL.Image.open(from_img).convert('RGB')
+        # pil_img.save(to_img)
+        shutil.copy(from_img, to_img)
 
     @staticmethod
     def write_output(image_list, output_dir, copy_data):
         print(f'Writing data to {output_dir}')
 
         path = Path(output_dir)
-        path.mkdir(exist_ok=True)
+        path.mkdir(exist_ok=True, parents=True)
 
         if len(os.listdir(path)) != 0:
             raise FileExistsError(f'Output directory is not empty')
@@ -188,10 +199,10 @@ class Converter:
         train_lines = []
         valid_lines = []
 
-        for image in image_list:
+        for index, image in enumerate(image_list):
             if copy_data:
-                image_path = str(images / (image.image_name + '.jpg'))
-                print(f'Writing image {image.image_path} -> {image_path}')
+                image_path = str(images / image.image_name)
+                print(f'[{index+1}/{len(image_list)}] Copy {image.image_path} -> {image_path}')
                 Converter.write_img(image.image_path, image_path)
 
             else:
@@ -215,4 +226,4 @@ class Converter:
 
 
 if __name__ == '__main__':
-    converter = Converter(LABELS_GLOB_PATTERN, IMAGES_SEARCH_ROOT, OUTPUT_DIR)
+    converter = Converter(LABELS_GLOB_PATTERN, IMAGES_SEARCH_ROOT, OUTPUT)

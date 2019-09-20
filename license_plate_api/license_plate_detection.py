@@ -1,9 +1,9 @@
 import cv2
 import os
 import torch
-from license_plate_api.models import *
-from license_plate_api.utils.utils import *
-from license_plate_api.utils.datasets import *
+from models import *
+from utils.utils import *
+from utils.datasets import *
 
 # TODO Make License Plate Detector -> Refer to detect.py in license_plate_api
 class LicensePlateDetector:

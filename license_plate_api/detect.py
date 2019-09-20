@@ -1,8 +1,8 @@
 from __future__ import division
 
-from license_plate_api.models import *
-from license_plate_api.utils.utils import *
-from license_plate_api.utils.datasets import *
+from models import *
+from utils.utils import *
+from utils.datasets import *
 
 import os
 import time
