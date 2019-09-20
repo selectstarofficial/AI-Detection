@@ -6,6 +6,7 @@ import abc
 from glob import glob
 import random
 import PIL.Image
+import argparse
 
 """
 XML sample
@@ -215,4 +216,12 @@ class Converter:
 
 
 if __name__ == '__main__':
-    converter = Converter(LABELS_GLOB_PATTERN, IMAGES_SEARCH_ROOT, OUTPUT_DIR)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--labels', required=True, help='data/**/*.xml')
+    parser.add_argument('--images', required=True, help='data/images')
+    parser.add_argument('--output', required=True, help='AI-Detection/data/custom')
+    parser.add_argument('--valid_split', default=0.3)
+    parser.add_argument('--copy_data', default=True, help='If false, do not copy image files and use original paths')
+    args = parser.parse_args()
+    copy_data = True if str(args.copy_data).lower() == 'true' else False
+    converter = Converter(args.labels, args.images, args.output, valid_split=args.valid_split, copy_data=copy_data)
