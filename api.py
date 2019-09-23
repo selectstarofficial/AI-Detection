@@ -4,9 +4,9 @@ from face_detection_api import FaceDetector
 from license_plate_api import LicensePlateDetector
 
 class IntegratedApi:
-    def __init__(self):
-        self.face_detector = FaceDetector()
-        self.license_plate_detector = LicensePlateDetector()
+    def __init__(self, threshold=0.5):
+        self.face_detector = FaceDetector(threshold=threshold)
+        self.license_plate_detector = LicensePlateDetector(threshold=threshold)
 
 
     def detect(self, image): # TODO when finished, update documentaion
@@ -25,7 +25,7 @@ class IntegratedApi:
 
         # 2. infer license_plate
         license_plate_result = self.license_plate_detector.detect(image)
-        result["license_plat"] = license_plate_result
+        result["license_plate"] = license_plate_result
         
         return result
 

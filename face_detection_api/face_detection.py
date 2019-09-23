@@ -10,7 +10,9 @@ import cv2
 from . import label_map_util
 
 class FaceDetector:
-    def __init__(self):
+    def __init__(self, threshold=0.5):
+        self.threshold = threshold
+
         # Path to frozen detection graph. This is the actual model that is used for the object detection.
         PATH_TO_CKPT = osp.join(osp.dirname(osp.abspath(__file__)), 'frozen_inference_graph_face.pb')
 
@@ -50,10 +52,11 @@ class FaceDetector:
             self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
 
-    def detect(self, bgr, threshold=0.5):
+    def detect(self, bgr):
         """
         Returns [(x1, y1, x2, y2)]
         """
+        threshold = self.threshold
         image_np = np.array(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
         image_np_expanded = np.expand_dims(image_np, axis=0)
 
