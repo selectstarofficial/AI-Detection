@@ -1,5 +1,6 @@
-data/images/*
-data/labels/*
+data/custom/images/*
+data/custom/labels/*
+data/*.tar
 .DS_Store
 build
 .git
