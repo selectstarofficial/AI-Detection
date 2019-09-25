@@ -13,11 +13,13 @@ from torch.autograd import Variable
 
 def init_valid_text(path):
     root = "license_plate_api/data/custom_with_face/labels"
+    image_root = "license_plate_api/data/license_plate_dataset/images"
     list = os.listdir(root)
     if not os.path.exists(path):
         with open(path, "w") as file:
             for name in list:
-                file.write("{}\n".format(os.path.join(root, name)))
+                real_name = name.split(".")[0]
+                file.write("{},{}\n".format(os.path.join(root, name), os.path.join(image_root,real_name,".jpg")))
 
             file.close()
 
