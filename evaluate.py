@@ -19,7 +19,7 @@ def init_valid_text(path):
         with open(path, "w") as file:
             for name in list:
                 real_name = name.split(".")[0]
-                file.write("{},{}\n".format(os.path.join(image_root,real_name,".jpg"), os.path.join(root, name)))
+                file.write("{},{}\n".format(os.path.join(image_root,"{}.jpg".format(real_name)), os.path.join(root, name)))
 
             file.close()
 
