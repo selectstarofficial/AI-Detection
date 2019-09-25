@@ -39,7 +39,7 @@ class LicensePlateDetector:
             image_ = cv2.resize(image, (self.img_size, self.img_size))
             image_ = torch.Tensor(image_).permute(2,0,1).unsqueeze(0).to(self.device)
         else:
-            image_ = image
+            image_ = image.to(self.device)
 
         # 2. inference
         result = self.model(image_)

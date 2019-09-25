@@ -37,7 +37,7 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         targets[:, 2:] = xywh2xyxy(targets[:, 2:])
         targets[:, 2:] *= img_size
 
-        imgs = Variable(imgs.type(Tensor).to(device), requires_grad=False)
+        imgs = Variable(imgs.type(Tensor), requires_grad=False).to(device)
 
         outputs = lplateModel.detect(imgs, threshold=conf_thres)
         outputs = non_max_suppression(outputs, conf_thres=conf_thres, nms_thres=nms_thres)
