@@ -7,7 +7,7 @@ from .utils.datasets import *
 
 # TODO Make License Plate Detector -> Refer to detect.py in license_plate_api
 class LicensePlateDetector:
-    def __init__(self, threshold=0.5, mode="inference"):
+    def __init__(self, mode="inference"):
         # Model Config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -17,7 +17,6 @@ class LicensePlateDetector:
         self.class_pth = os.path.join(root, 'config', 'classes.names')  # TODO add classes names file from cloud
         self.img_size = 416
         self.nms_thres = 0.5
-        self.conf_thres = threshold
         self.mode = mode
 
         # Load Model
@@ -33,15 +32,18 @@ class LicensePlateDetector:
         # Load Classes Info
         self.classes = load_classes(self.class_pth)
 
-    def detect(self, image):
+    def detect(self, image, threshold=0.5):
         mode = self.mode
         # 1. reformat image for input
-        image_ = cv2.resize(image, (self.img_size, self.img_size))
-        image_ = torch.Tensor(image_).permute(2,0,1).unsqueeze(0).to(self.device)
+        if mode=="inference":
+            image_ = cv2.resize(image, (self.img_size, self.img_size))
+            image_ = torch.Tensor(image_).permute(2,0,1).unsqueeze(0).to(self.device)
+        else:
+            image_ = image
 
         # 2. inference
         result = self.model(image_)
-        result = non_max_suppression(result, conf_thres=self.conf_thres, nms_thres=self.nms_thres)
+        result = non_max_suppression(result, conf_thres=threshold, nms_thres=self.nms_thres)
 
         if mode=="inference":
             result = result[0].cpu().numpy()
