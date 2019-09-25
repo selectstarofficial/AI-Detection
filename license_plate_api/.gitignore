@@ -1,5 +1,7 @@
 data/custom/images/*
 data/custom/labels/*
+data/custom_with_face/*
+data/license_plate_dataset/*
 data/*.tar
 .DS_Store
 build
