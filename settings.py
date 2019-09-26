@@ -2,6 +2,7 @@ class Settings:
     input_dir = './input'
     output_dir = './output'
     face_threshold = 0.15
+    license_plate_threshold = 0.5
     bbox_red = 150
     bbox_green = 150
     bbox_blue = 150

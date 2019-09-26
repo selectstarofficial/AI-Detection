@@ -4,10 +4,11 @@ import torch
 from .models import *
 from .utils.utils import *
 from .utils.datasets import *
+from settings import Settings
 
 # TODO Make License Plate Detector -> Refer to detect.py in license_plate_api
 class LicensePlateDetector:
-    def __init__(self, mode="inference"):
+    def __init__(self, settings: Settings):
         # Model Config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -15,9 +16,8 @@ class LicensePlateDetector:
         self.weight_path = os.path.join(root, 'yolov3_ckpt_98.pth')
         self.model_cfg = os.path.join(root, 'config', 'yolov3-custom.cfg')
         self.class_pth = os.path.join(root, 'config', 'classes.names')  # TODO add classes names file from cloud
-        self.img_size = 416  # TODO change to 704 with settings.json
+        self.img_size = settings.license_plate_model_size
         self.nms_thres = 0.5
-        self.mode = mode
 
         # Load Model
         self.model = Darknet(self.model_cfg, img_size=self.img_size).to(self.device)
