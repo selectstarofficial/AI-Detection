@@ -26,8 +26,6 @@ def init_valid_text(path):
 def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thres, img_size, batchsize):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
-
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
@@ -37,7 +35,7 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         targets[:, 2:] = xywh2xyxy(targets[:, 2:])
         targets[:, 2:] *= img_size
 
-        imgs = Variable(imgs.type(Tensor), requires_grad=False).to(device)
+        imgs = Variable(imgs.to(device), requires_grad=False)
 
         outputs = lplateModel.detect(imgs, threshold=conf_thres)
         outputs = non_max_suppression(outputs, conf_thres=conf_thres, nms_thres=nms_thres)
