@@ -15,7 +15,7 @@ class LicensePlateDetector:
         self.weight_path = os.path.join(root, 'yolov3_ckpt_98.pth')
         self.model_cfg = os.path.join(root, 'config', 'yolov3-custom.cfg')
         self.class_pth = os.path.join(root, 'config', 'classes.names')  # TODO add classes names file from cloud
-        self.img_size = 416
+        self.img_size = 416  # TODO change to 704 with settings.json
         self.nms_thres = 0.5
         self.mode = mode
 
