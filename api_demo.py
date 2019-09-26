@@ -22,7 +22,7 @@ if __name__ == '__main__':
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Inference
-        masked_image = api.mask(image, show_boundary=False)
+        masked_image = api.mask(image, settings)
 
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
