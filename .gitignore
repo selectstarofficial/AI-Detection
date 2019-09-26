@@ -11,4 +11,9 @@ weights/*
 __pycache__
 checkpoints/*.pth
 .idea/
-logs/*
+*.swp
+*.swo
+*~
+*.ipynb_checkpoints
+test_photos/
+total_dataset_config/valid.txt
