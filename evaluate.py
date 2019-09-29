@@ -11,6 +11,8 @@ import torch
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
+from settings import Settings
+
 def init_valid_text(path):
     root = "license_plate_api/data/custom_with_face/labels"
     image_root = "license_plate_api/data/license_plate_dataset/images"
@@ -24,7 +26,8 @@ def init_valid_text(path):
             file.close()
 
 def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thres, img_size, batchsize):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # TODO: include face model
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
@@ -49,25 +52,21 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
     return precision, recall, AP, f1, ap_class
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--n_cpu", type=int, default=4, help="number of cpu threads to use during batch generation")
-    parser.add_argument("--img_size", type=int, default=704, help="size of each image dimension")
-    args = parser.parse_args()
+    settings = Settings()
 
     # configure valid dataset
-    data_config = parse_data_config(os.path.join(args.data_config, "custom.data"))
+    data_config = parse_data_config('total_dataset_config/custom.data')
     class_names = load_classes(data_config["names"])
     valid_path = data_config["valid"]
     init_valid_text(valid_path)
 
-    valid_dataset = ListDataset(valid_path, img_size=args.img_size, augment=False, multiscale=False)
+    valid_dataset = ListDataset(valid_path, img_size=settings.license_plate_model_size, augment=False, multiscale=False)
     valid_dataloader = torch.utils.data.DataLoader(
-        valid_dataset, batch_size=1, shuffle=False, num_workers=args.n_cpu, collate_fn=valid_dataset.collate_fn
+        valid_dataset, batch_size=1, shuffle=False, num_workers=4, collate_fn=valid_dataset.collate_fn
     )
-
-
-    license_plate_model = LicensePlateDetector(mode="eval")
-    face_model = FaceDetector()
+    
+    license_plate_model = LicensePlateDetector(settings)
+    face_model = FaceDetector(settings)
 
     (precision, recall, AP, f1, ap_class) = evaluate(
         lplateModel=license_plate_model,
@@ -76,7 +75,7 @@ if __name__ == '__main__':
         iou_thres=0.5,
         conf_thres=0.5,
         nms_thres=0.5,
-        img_size=args.img_size,
+        img_size=settings.license_plate_model_size,
         batchsize=1
     )
 

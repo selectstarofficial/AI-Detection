@@ -8,10 +8,12 @@ import numpy as np
 import tensorflow as tf
 import cv2
 from . import label_map_util
+from settings import Settings
+
 
 class FaceDetector:
-    def __init__(self, threshold=0.5):
-        self.threshold = threshold
+    def __init__(self, settings: Settings):
+        self.threshold = settings.face_threshold
 
         # Path to frozen detection graph. This is the actual model that is used for the object detection.
         PATH_TO_CKPT = osp.join(osp.dirname(osp.abspath(__file__)), 'frozen_inference_graph_face.pb')
@@ -82,31 +84,3 @@ class FaceDetector:
             bbox_score.append((int(round(x1)), int(round(y1)), int(round(x2)), int(round(y2)), scores[i]))
 
         return bbox_score
-
-if __name__ == '__main__':
-    cap = cv2.VideoCapture("../out/test/0.mp4")
-    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    out = None
-
-    detector = FaceDetector()
-
-    frame_num = total
-    while frame_num:
-        frame_num -= 1
-        ret, image = cap.read()
-        if ret == 0:
-            break
-        
-        faces = detector.detect(image, threshold=0.3)
-        print(faces, scores)
-        
-        for i, face in enumerate(faces):
-            color = int(255 * scores[i])
-            cv2.rectangle(image, (face[0], face[1]), (face[2], face[3]), (255,255,255), thickness=4)
-            cv2.putText(image, f'{int(face[4]*100)}%', (face[2], face[3]), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
-
-        cv2.imshow('render', image)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            print('User Interrupted')
-            exit(1)
