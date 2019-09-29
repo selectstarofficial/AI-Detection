@@ -32,8 +32,7 @@ class LicensePlateDetector:
         # Load Classes Info
         self.classes = load_classes(self.class_pth)
 
-    def detect(self, image, threshold=0.5):
-        mode = self.mode
+    def detect(self, image, mode="inference", threshold=0.5):
         # 1. reformat image for input
         if mode=="inference":
             image_ = cv2.resize(image, (self.img_size, self.img_size))
