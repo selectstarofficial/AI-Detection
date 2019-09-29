@@ -18,3 +18,4 @@ checkpoints/*.pth
 test_photos/
 total_dataset_config/valid.txt
 *.pyc
+__pycache__/
