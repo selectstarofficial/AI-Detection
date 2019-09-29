@@ -10,12 +10,12 @@ from settings import Settings
 class LicensePlateDetector:
     def __init__(self, settings: Settings):
         # Model Config
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         root = os.path.dirname(os.path.realpath(__file__))
         self.weight_path = os.path.join(root, 'yolov3_ckpt_98.pth')
-        self.model_cfg = os.path.join(root, 'config', 'yolov3-custom.cfg')
-        self.class_pth = os.path.join(root, 'config', 'classes.names')  # TODO add classes names file from cloud
+        self.model_cfg = os.path.join(settings.license_plate_model_config_dir, 'yolov3-custom.cfg')
+        self.class_pth = os.path.join(settings.license_plate_model_config_dir, 'classes.names')
         self.img_size = settings.license_plate_model_size
         self.nms_thres = 0.5
 

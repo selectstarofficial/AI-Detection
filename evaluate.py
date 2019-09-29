@@ -55,7 +55,7 @@ if __name__ == '__main__':
     settings = Settings()
 
     # configure valid dataset
-    data_config = parse_data_config('total_dataset_config/custom.data')
+    data_config = parse_data_config(os.path.join(settings.dataset_config_dir, 'custom.data'))
     class_names = load_classes(data_config["names"])
     valid_path = data_config["valid"]
     init_valid_text(valid_path)
