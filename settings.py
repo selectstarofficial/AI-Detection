@@ -1,6 +1,7 @@
 class Settings:
     input_dir = './input'
     output_dir = './output'
+    config_dir = ''
     face_threshold = 0.15
     bbox_red = 150
     bbox_green = 150
@@ -12,3 +13,4 @@ class Settings:
     max_size_pixel = 512
     min_size_pixel = 0
     license_plate_model_size = 704
+

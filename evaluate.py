@@ -50,7 +50,6 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_config", type=str, default="total_dataset_config/", help="path to data config file")
     parser.add_argument("--n_cpu", type=int, default=4, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=704, help="size of each image dimension")
     args = parser.parse_args()
