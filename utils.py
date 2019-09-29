@@ -21,34 +21,6 @@ def get_dataset(path, has_class_directories=True):
   
     return dataset
 
-
-def make_xml(img_info,bboxes):
-    img_path,img_id,img_width,img_height = img_info
-    # AnnotationXML = Element.Element('annotations')
-    imageXML = Element.Element('image')
-    imageXML.set('id', str(img_id))
-    imageXML.set('name', os.path.split(img_path)[-1])
-    imageXML.set('width', str(img_width))
-    imageXML.set('height', str(img_height))
-    for (x1, y1, x2, y2,score) in bboxes:
-        xmin=max(min(x1,x2),0)
-        ymin=max(min(y1,y2),0)
-        xmax=min(max(x1,x2),img_width)
-        ymax=min(max(y1,y2),img_height)
-
-        boxXML = Element.Element('box')
-        boxXML.set('label', 'face')
-        boxXML.set('xtl', str(xmin))
-        boxXML.set('ytl', str(ymin))
-        boxXML.set('xbr', str(xmax))
-        boxXML.set('ybr', str(ymax))
-        imageXML.append(boxXML)
-    # AnnotationXML.append(imageXML)
-    return imageXML
-    # with open(save_path, 'w') as f:
-    #     f.write((Element.tostring(AnnotationXML, pretty_print=True)).decode('utf-8'))
-
-
 def make_bbox_small(bboxes,width_ratio,height_ratio):
     bboxes_small=[]
     for (x1, y1, x2, y2, score) in bboxes:

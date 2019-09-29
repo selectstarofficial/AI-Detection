@@ -3,11 +3,11 @@ from license_plate_api import LicensePlateDetector
 import cv2
 import os
 import os.path as osp
-from glob import glob
 import numpy as np
 from PIL import Image
 from settings import Settings
 import utils
+from lxml import etree as Element
 
 class BBoxClass:
     def __init__(self, label, x1, y1, x2, y2, score):
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
             for bbox in bboxes:
                 x1, y1, x2, y2, score = bbox
-                bbox_info = BBoxClass('face', x1, y1, x2, y2, score)
+                bbox_info = BBoxClass(settings.xml_face_name, x1, y1, x2, y2, score)
                 img_info.bbox_list.append(bbox_info)
 
             images[image_path] = img_info
@@ -87,10 +87,8 @@ if __name__ == '__main__':
     print('Preparing detector...')
     license_plate_api.detect(np.zeros((1080, 1920, 3), dtype=np.uint8))
 
-    global_img_id = 0
     for cls in dataset:
         save_class_dir = osp.join(settings.output_dir, cls.name)
-        os.makedirs(save_class_dir, exist_ok=True)
         cls.image_paths = sorted(cls.image_paths)
 
         for i, image_path in enumerate(cls.image_paths):
@@ -106,19 +104,15 @@ if __name__ == '__main__':
 
             for bbox in bboxes:
                 x1, y1, x2, y2, score = bbox
-                bbox_info = BBoxClass('license_plate', x1, y1, x2, y2, score)
+                bbox_info = BBoxClass(settings.xml_license_plate_name, x1, y1, x2, y2, score)
                 images[image_path].bbox_list.append(bbox_info)
-
-            global_img_id += 1
 
 
     ### RENDERING RESULT ###
     print(f"Rendering result... save_img={settings.save_img}")
     if settings.save_img:
-        global_img_id = 0
         for cls in dataset:
             save_class_dir = osp.join(settings.output_dir, cls.name)
-            os.makedirs(save_class_dir, exist_ok=True)
             cls.image_paths = sorted(cls.image_paths)
 
             for i, image_path in enumerate(cls.image_paths):
@@ -140,4 +134,47 @@ if __name__ == '__main__':
                     else:
                         raise TypeError("bbox object should be instance of BBoxClass")
 
-                global_img_id += 1
+
+    ### GENERATE XML ###
+    print('Generating XML files...')
+    for cls in dataset:
+        save_class_dir = osp.join(settings.output_dir, cls.name)
+        cls.image_paths = sorted(cls.image_paths)
+
+        save_path = osp.join(save_class_dir, '{}.xml'.format(cls.name))
+        _annotation = Element.Element('annotations')
+
+        for i, image_path in enumerate(cls.image_paths):
+            print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
+
+            info = images[image_path]
+
+            imageXML = Element.Element('image')
+            imageXML.set('id', str(info.id))
+            imageXML.set('name', os.path.split(image_path)[-1])
+            imageXML.set('width', str(info.width))
+            imageXML.set('height', str(info.height))
+
+            for b in info.bbox_list:
+                if isinstance(b, BBoxClass):
+                    xmin = max(min(b.x1, b.x2), 0)
+                    ymin = max(min(b.y1, b.y2), 0)
+                    xmax = min(max(b.x1, b.x2), info.width)
+                    ymax = min(max(b.y1, b.y2), info.height)
+
+                    boxXML = Element.Element('box')
+                    boxXML.set('label', b.label)
+                    boxXML.set('xtl', str(xmin))
+                    boxXML.set('ytl', str(ymin))
+                    boxXML.set('xbr', str(xmax))
+                    boxXML.set('ybr', str(ymax))
+                    imageXML.append(boxXML)
+                else:
+                    raise TypeError("bbox object should be instance of BBoxClass")
+            _annotation.append(imageXML)
+
+        with open(save_path, 'w') as f:
+            print('Saving xml to {}'.format(save_path))
+            f.write((Element.tostring(_annotation, pretty_print=True)).decode('utf-8'))
+
+    print('Done.')
