@@ -36,7 +36,8 @@ class FaceDetector:
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
             config = tf.ConfigProto()
-            config.gpu_options.allow_growth = True
+            config.gpu_options.per_process_gpu_memory_fraction = 0.333
+            config.gpu_options.allow_growth = False
 
             self.session = tf.Session(graph=detection_graph, config=config)
 
@@ -56,7 +57,7 @@ class FaceDetector:
 
     def detect(self, rgb_image):
         """
-        Returns [(x1, y1, x2, y2)]
+        Returns [(x1, y1, x2, y2, score)]
         """
         threshold = self.threshold
         image_np = np.array(rgb_image)
@@ -84,3 +85,6 @@ class FaceDetector:
             bbox_score.append((int(round(x1)), int(round(y1)), int(round(x2)), int(round(y2)), scores[i]))
 
         return bbox_score
+
+    def release_memory(self):
+        self.session.close()

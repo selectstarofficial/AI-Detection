@@ -62,9 +62,11 @@ class LicensePlateDetector:
             detections = non_max_suppression(detections, self.conf_thres, self.nms_thres)
             detections = detections[0]  # for single batch
 
-        if detections is not None:
-            detections = rescale_boxes(detections, self.img_size, rgb_image.shape[:2])
-            detections = detections.detach().cpu().numpy()
+        if detections is None:
+            return []
+
+        detections = rescale_boxes(detections, self.img_size, rgb_image.shape[:2])
+        detections = detections.detach().cpu().numpy()
 
         result = []
         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
