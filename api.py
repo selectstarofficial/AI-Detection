@@ -9,9 +9,9 @@ class IntegratedApi:
         self.face_detector = FaceDetector(settings)
         self.license_plate_detector = LicensePlateDetector(settings)
 
-    def detect(self, image): # TODO when finished, update documentaion
+    def detect(self, rgb_image): # TODO when finished, update documentaion
         """ Detect face and license_plate
-        :param image: numpy_array(width, height, 3)
+        :param image: RGB with 0~255
         :return: Dict("face" : list[(x1, y1, x2, y2, score)], "license_plate": list[(x1, y1, x2, y2, score)]) : each coordinates are real pixel values
         """
         result = {
@@ -20,11 +20,11 @@ class IntegratedApi:
                 }
         
         # 1. infer face
-        face_result = self.face_detector.detect(image)
+        face_result = self.face_detector.detect(rgb_image)
         result["face"] = face_result
 
         # 2. infer license_plate
-        license_plate_result = self.license_plate_detector.detect(image)
+        license_plate_result = self.license_plate_detector.detect(rgb_image)
         result["license_plate"] = license_plate_result
         
         return result
@@ -37,9 +37,10 @@ class IntegratedApi:
         :return: numpy_array(width, height, 3) : face and license_plate blurred 
         """
         detections = self.detect(image)
-        
-        image = image/255
+
         image = image.astype('float32')
+        image /= 255.0
+
         for key in detections.keys():
             for detection in detections[key]:
                 image = self.blur(image, detection, settings)
