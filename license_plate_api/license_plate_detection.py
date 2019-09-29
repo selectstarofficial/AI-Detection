@@ -45,7 +45,10 @@ class LicensePlateDetector:
         result = non_max_suppression(result, conf_thres=threshold, nms_thres=self.nms_thres)
 
         if mode=="inference":
-            result = result[0].cpu().numpy()
+            try:
+                result = result[0].cpu().numpy()
+            except:
+                pass
 
             detections = []
             # 3. resize to original image size

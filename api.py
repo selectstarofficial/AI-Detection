@@ -14,6 +14,7 @@ class IntegratedApi:
         :param image: numpy_array(width, height, 3)
         :return: Dict("face" : list[(x1, y1, x2, y2, score)], "license_plate": list[(x1, y1, x2, y2, score)]) : each coordinates are real pixel values
         """
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         result = {
                     "face" : [],
                     "license_plate" : []
@@ -53,7 +54,7 @@ class IntegratedApi:
         :param detection: list[(x1, y1, x2, y2, score)] : single detection boundary
         :return: numpy_array(width, height, 3) : image blurred based on single detection boundary
         """
-        x1, y1, x2, y2 = detection
+        x1, y1, x2, y2, score = detection
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
         width = x2 - x1
