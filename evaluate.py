@@ -42,12 +42,15 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         imgs = Variable(imgs.to(device), requires_grad=False)
 
         outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres)
-        print("outpus: {}".format(outputs[0].shape))
         # 2. detect face
-        print(imgs.shape)
         imgs = imgs.permute(0,2,3,1).cpu().numpy()  # shape: [batch, w, h, 3]
         face_outputs = faceModel.detect(imgs[0])
-        print(face_outputs)
+        try:
+            print("outpus: {}".format(outputs[0].shape))
+            print(imgs.shape)
+            print(face_outputs)
+        except:
+            pass
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
 
