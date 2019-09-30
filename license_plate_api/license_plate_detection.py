@@ -1,10 +1,12 @@
 import cv2
 import os
 import torch
-from .models import *
-from .utils.utils import *
-from .utils.datasets import *
+from .models import Darknet
+from .utils.utils import load_classes, non_max_suppression, rescale_boxes
+from .utils.datasets import pad_to_square, resize
 from settings import Settings
+import torchvision.transforms as transforms
+from PIL import Image
 
 # TODO Make License Plate Detector -> Refer to detect.py in license_plate_api
 class LicensePlateDetector:
@@ -17,7 +19,8 @@ class LicensePlateDetector:
         self.model_cfg = os.path.join(settings.license_plate_model_config_dir, 'yolov3-custom.cfg')
         self.class_pth = os.path.join(settings.license_plate_model_config_dir, 'classes.names')
         self.img_size = settings.license_plate_model_size
-        self.nms_thres = 0.5
+        self.conf_thres = settings.license_plate_threshold
+        self.nms_thres = 0.4
 
         # Load Model
         self.model = Darknet(self.model_cfg, img_size=self.img_size).to(self.device)
@@ -40,24 +43,5 @@ class LicensePlateDetector:
         else:
             image_ = image.to(self.device)
 
-        # 2. inference
-        result = self.model(image_)
-        result = non_max_suppression(result, conf_thres=threshold, nms_thres=self.nms_thres)
-
-        if mode=="inference":
-            try:
-                result = result[0].cpu().numpy()
-            except:
-                pass
-
-            detections = []
-            # 3. resize to original image size
-            if result is not None:
-                detections = rescale_boxes(result, self.img_size, image.shape[:2])
-                detections = detections[detections[:, -1]==0]
-                detections = detections[:,:5]
-        else:
-            detections = result
-
-        return detections
+        return image_
 

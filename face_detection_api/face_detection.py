@@ -54,12 +54,12 @@ class FaceDetector:
             self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
 
-    def detect(self, bgr):
+    def detect(self, rgb_image):
         """
         Returns [(x1, y1, x2, y2)]
         """
         threshold = self.threshold
-        image_np = np.array(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
+        image_np = np.array(rgb_image)
         image_np_expanded = np.expand_dims(image_np, axis=0)
 
         (boxes, scores, classes, num_detections) = self.session.run(

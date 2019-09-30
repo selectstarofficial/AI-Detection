@@ -4,7 +4,7 @@ class Settings:
     dataset_config_dir = './dataset_config'
     license_plate_model_config_dir = './license_plate_api/model_info/'
     face_threshold = 0.15
-    license_plate_threshold = 0.5
+    license_plate_threshold = 0.8
     bbox_red = 150
     bbox_green = 150
     bbox_blue = 150
