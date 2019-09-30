@@ -6,7 +6,7 @@ class Settings:
     bbox_red = 150  # 바운딩박스 빨간색 농도. (0~255)
     bbox_green = 150  # 바운딩박스 초록색 농도. (0~255)
     bbox_blue = 150  # 바운딩박스 파란색 농도. (0~255)
-    bbox_thickness = 1  # 바운딩박스 외곽선 두께. (픽셀값)
+    bbox_thickness = 1  # 바운딩박스 외곽선 두께. -1 이면 박스 내부를 채웁니다. (픽셀값)
     show_score = True  # True 이면 빨간색으로 클래스와 확신도를 표시합니다. False 이면 글자를 표시하지 않음.
     save_img = True  # True 이면 결과 이미지를 저장합니다. False 이면 이미지를 저장하지 않음.
     face_bbox_width_ratio = 0.6  # 얼굴 박스 너비 축소 비율입니다. (0.6이면 원래 크기의 60%로 줄입니다.)
