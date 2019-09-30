@@ -56,7 +56,7 @@ class FaceDetector:
 
     def detect(self, rgb_image):
         """
-        Returns [(x1, y1, x2, y2)]
+        Returns [(x1, y1, x2, y2, score)]
         """
         threshold = self.threshold
         image_np = np.array(rgb_image)
