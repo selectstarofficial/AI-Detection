@@ -1,9 +1,9 @@
 <annotations>
   <image id="0" name="MP_SEL_004582.jpg" width="1920" height="1080">
     <box label="face" xtl="1355.2" ytl="100.2" xbr="1388.8" ybr="145.8"/>
-    <box label="license_plate" xtl="1848.427001953125" ytl="273.69786071777344" xbr="1875.717041015625" ybr="290.15992736816406"/>
+    <box label="license_plate" xtl="1848.427001953125" ytl="273.69786071777344" xbr="1875.716796875" ybr="290.15992736816406"/>
     <box label="license_plate" xtl="632.1801452636719" ytl="240.75726318359375" xbr="662.4067687988281" ybr="256.5831298828125"/>
-    <box label="license_plate" xtl="1438.7906494140625" ytl="235.8304672241211" xbr="1452.5533447265625" ybr="240.8982925415039"/>
+    <box label="license_plate" xtl="1438.7906494140625" ytl="235.83048248291016" xbr="1452.5533447265625" ybr="240.8982162475586"/>
     <box label="license_plate" xtl="961.3613891601562" ytl="215.10846710205078" xbr="976.0149536132812" ybr="223.03643035888672"/>
   </image>
 </annotations>
