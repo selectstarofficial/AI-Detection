@@ -40,17 +40,20 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
 
         # 1. detect license plate
         imgs = Variable(imgs.to(device), requires_grad=False)
+        lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,score,label)]
 
-        outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres)
         # 2. detect face
         imgs = imgs.permute(0,2,3,1).cpu().numpy()[0]  # shape: [w, h, 3]
-        face_outputs = faceModel.detect(imgs)
-        try:
-            print("outputs: {}".format(outputs[0].shape))
-            print(imgs.shape)
-            print(face_outputs)
-        except:
-            pass
+        face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
+        for i in range(len(face_outputs)):
+            face_outputs[i] = face_outputs[i].append(1)
+
+        # 3. concatenate output
+        outputs = []
+        for output in lplate_outputs:
+            outputs.append(output)
+        for output in face_outputs:
+            outputs.append(output)
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
 
