@@ -35,7 +35,7 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
         # Extract labels
         labels += targets[:, 1].tolist()
-        print(targets[:, 1].tolist())
+        #print(targets[:, 1].tolist())
         # Rescale target
         targets[:, 2:] = xywh2xyxy(targets[:, 2:])
         targets[:, 2:] *= img_size
@@ -43,20 +43,23 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         # 1. detect license plate
         imgs = Variable(imgs.to(device), requires_grad=False)
         lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
-
+        
         # 2. detect face
         imgs = imgs.permute(0,2,3,1).cpu().numpy()[0]  # shape: [w, h, 3]
         face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
-        for i in range(len(face_outputs)):
-            face_outputs[i] = face_outputs[i].append(1).append(1) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
-        print(face_outputs)
+        
         # 3. concatenate output
+        lplate_outputs = lplate_outputs[0]
         outputs = []
-        for output in lplate_outputs:
-            outputs.append(output)
         for output in face_outputs:
+            output = list(output)
+            output.append(1)
+            output.append(1)
             outputs.append(output)
-
+        outputs = torch.Tensor(outputs)
+        if lplate_outputs is not None:
+            outputs = torch.cat((lplate_outputs, outputs), axis = 0)
+        outputs = [outputs]
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
 
     # Concatenate sample statistics
