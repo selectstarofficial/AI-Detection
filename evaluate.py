@@ -14,8 +14,8 @@ from torch.autograd import Variable
 from settings import Settings
 
 def init_valid_text(path):
-    root = "license_plate_api/data/custom_1/labels"
-    image_root = "license_plate_api/data/custom_1/images"
+    root = "license_plate_api/data/custom/labels"
+    image_root = "license_plate_api/data/custom/images"
     list = os.listdir(root)
     
     with open(path, "w") as file:
@@ -35,22 +35,20 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
         # Extract labels
         labels += targets[:, 1].tolist()
+        print(targets[:, 1].tolist())
         # Rescale target
         targets[:, 2:] = xywh2xyxy(targets[:, 2:])
         targets[:, 2:] *= img_size
 
         # 1. detect license plate
         imgs = Variable(imgs.to(device), requires_grad=False)
-        lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,score,label)]
+        lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
 
         # 2. detect face
         imgs = imgs.permute(0,2,3,1).cpu().numpy()[0]  # shape: [w, h, 3]
         face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
-        print(face_outputs)
         for i in range(len(face_outputs)):
-            face_outputs[i] = face_outputs[i].append(1)
-        
-        
+            face_outputs[i] = face_outputs[i].append(1).append(1) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
         
         # 3. concatenate output
         outputs = []
