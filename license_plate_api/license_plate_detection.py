@@ -15,9 +15,9 @@ class LicensePlateDetector:
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         root = os.path.dirname(os.path.realpath(__file__))
-        self.weight_path = os.path.join(root, 'yolov3_ckpt_98.pth')
-        self.model_cfg = os.path.join(settings.license_plate_model_config_dir, 'yolov3-custom.cfg')
-        self.class_pth = os.path.join(settings.license_plate_model_config_dir, 'classes.names')
+        self.weight_path = os.path.join(root, 'checkpoints_1', 'yolov3_ckpt_98.pth')
+        self.model_cfg = os.path.join(root, 'model', 'yolov3-custom.cfg')
+        self.class_pth = os.path.join(root, 'model', 'classes.names')  # TODO add classes names file from cloud
         self.img_size = settings.license_plate_model_size
         self.conf_thres = settings.license_plate_threshold
         self.nms_thres = 0.4
@@ -35,13 +35,67 @@ class LicensePlateDetector:
         # Load Classes Info
         self.classes = load_classes(self.class_pth)
 
-    def detect(self, image, mode="inference", threshold=0.5):
+    def preprocess(self, rgb_image):
+        # Extract image as PyTorch tensor
+        img_pil = Image.fromarray(rgb_image)
+        img = transforms.ToTensor()(img_pil)
+        # Pad to square resolution
+        img, _ = pad_to_square(img, 0)
+        # Resize
+        img = resize(img, self.img_size)
+        # Create single batch
+        imgs = img.unsqueeze(0)
+
+        return imgs
+
+#     def detect(self, rgb_image):
+#         """
+
+#         :param image: RGB with 0~255
+#         :return: [(x1, y1, x2, y2, score)]
+#         """
+#         imgs = self.preprocess(rgb_image)
+#         input_imgs = imgs.to(self.device)
+
+#         with torch.no_grad():
+#             detections = self.model(input_imgs)
+#             detections = non_max_suppression(detections, self.conf_thres, self.nms_thres)
+#             detections = detections[0]  # for single batch
+
+#         if detections is not None:
+#             detections = rescale_boxes(detections, self.img_size, rgb_image.shape[:2])
+#             detections = detections.detach().cpu().numpy()
+
+#         result = []
+#         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
+#             result.append((x1, y1, x2, y2, conf))
+
+#         return result
+
+
+    def detect(self, image, mode="inference",threshold=0.5):
         # 1. reformat image for input
         if mode=="inference":
             image_ = cv2.resize(image, (self.img_size, self.img_size))
             image_ = torch.Tensor(image_).permute(2,0,1).unsqueeze(0).to(self.device)
         else:
             image_ = image.to(self.device)
-
-        return image_
-
+    
+        # 2. inference
+        result = self.model(image_)
+        result = non_max_suppression(result, conf_thres=threshold, nms_thres=self.nms_thres)
+    
+        if mode=="inference":
+            result = result[0].cpu().numpy()
+    
+            detections = []
+            # 3. resize to original image size
+            if result is not None:
+                detections = rescale_boxes(result, self.img_size, image.shape[:2])
+                detections = detections[detections[:, -1]==0]
+                detections = detections[:,:5]
+        else:
+            detections = result
+    
+        return detections
+    

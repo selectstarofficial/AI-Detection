@@ -14,16 +14,17 @@ from torch.autograd import Variable
 from settings import Settings
 
 def init_valid_text(path):
-    root = "license_plate_api/data/custom_with_face/labels"
-    image_root = "license_plate_api/data/license_plate_dataset/images"
+    root = "license_plate_api/data/custom_1/labels"
+    image_root = "license_plate_api/data/custom_1/images"
     list = os.listdir(root)
-    if not os.path.exists(path):
-        with open(path, "w") as file:
-            for name in list:
-                real_name = name.split(".")[0]
+    
+    with open(path, "w") as file:
+        for name in list:
+            real_name = name.split(".")[0]
+            if os.path.exists(os.path.join(image_root,"{}.jpg".format(real_name))) and os.path.exists(os.path.join(root, name)):
                 file.write("{},{}\n".format(os.path.join(image_root,"{}.jpg".format(real_name)), os.path.join(root, name)))
 
-            file.close()
+        file.close()
 
 def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thres, img_size, batchsize):
     # TODO: include face model
@@ -45,9 +46,12 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         # 2. detect face
         imgs = imgs.permute(0,2,3,1).cpu().numpy()[0]  # shape: [w, h, 3]
         face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
+        print(face_outputs)
         for i in range(len(face_outputs)):
             face_outputs[i] = face_outputs[i].append(1)
-
+        
+        
+        
         # 3. concatenate output
         outputs = []
         for output in lplate_outputs:

@@ -5,8 +5,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-from utils.parse_config import *
-from utils.utils import build_targets, to_cpu
+from .utils.parse_config import *
+from .utils.utils import build_targets, to_cpu
 
 
 def create_modules(module_defs):
@@ -104,7 +104,6 @@ class YOLOLayer(nn.Module):
 
     def __init__(self, anchors, num_classes, img_dim=416):
         super(YOLOLayer, self).__init__()
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.anchors = anchors
         self.num_anchors = len(anchors)
         self.num_classes = num_classes
@@ -116,8 +115,10 @@ class YOLOLayer(nn.Module):
         self.metrics = {}
         self.img_dim = img_dim
         self.grid_size = 0  # grid size
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     def compute_grid_offsets(self, grid_size, cuda=True):
+        
         self.grid_size = grid_size
         g = self.grid_size
         FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
