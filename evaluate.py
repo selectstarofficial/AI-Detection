@@ -49,7 +49,7 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
         for i in range(len(face_outputs)):
             face_outputs[i] = face_outputs[i].append(1).append(1) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
-        
+        print(face_outputs)
         # 3. concatenate output
         outputs = []
         for output in lplate_outputs:

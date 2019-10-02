@@ -73,7 +73,7 @@ class FaceDetector:
         height, width, channels = image_np.shape
 
         bbox_score = []
-
+        
         for i in range(int(num_detections)):
             if scores[i] < threshold:
                 continue
