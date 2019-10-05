@@ -13,6 +13,9 @@ from torch.autograd import Variable
 
 from settings import Settings
 
+import matplotlib.pyplot as plt
+
+
 def init_valid_text(path):
     root = "license_plate_api/data/custom/labels"
     image_root = "license_plate_api/data/custom/images"
@@ -33,6 +36,13 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
+        ### DEBUG CODE ###
+        new_img = imgs.clone()
+        new_img = new_img.permute(0,2,3,1).cpu().numpy()[0]
+        plt.imshow(new_img)
+        plt.show()
+        ######
+
         # Extract labels
         labels += targets[:, 1].tolist()
         #print(targets[:, 1].tolist())

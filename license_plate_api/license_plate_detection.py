@@ -15,7 +15,7 @@ class LicensePlateDetector:
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         root = os.path.dirname(os.path.realpath(__file__))
-        self.weight_path = os.path.join(root, 'checkpoints_1', 'yolov3_ckpt_98.pth')
+        self.weight_path = os.path.join(root, 'yolov3_ckpt_98.pth')
         self.model_cfg = os.path.join(root, 'model', 'yolov3-custom.cfg')
         self.class_pth = os.path.join(root, 'model', 'classes.names')  # TODO add classes names file from cloud
         self.img_size = settings.license_plate_model_size
