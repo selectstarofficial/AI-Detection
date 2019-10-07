@@ -35,12 +35,12 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
 
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
-    for batch_i, (_, imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
+    for batch_i, (_, imgs, original_img, targets, targets_) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
         ### DEBUG CODE ###
-        new_img = imgs.clone()
-        new_img = new_img.permute(0,2,3,1).cpu().numpy()[0]
-        plt.imshow(new_img)
-        plt.show()
+        #new_img = imgs.clone()
+        #new_img = new_img.permute(0,2,3,1).cpu().numpy()[0]
+        #plt.imshow(new_img)
+        #plt.show()
         ######
 
         # Extract labels
@@ -55,8 +55,7 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
         
         # 2. detect face
-        imgs = imgs.permute(0,2,3,1).cpu().numpy()[0]  # shape: [w, h, 3]
-        face_outputs = faceModel.detect(imgs) # list[(x1,y1,x2,y2,score)]
+        face_outputs = faceModel.detect(original_img) # list[(x1,y1,x2,y2,score)]
         
         # 3. concatenate output
         lplate_outputs = lplate_outputs[0]
@@ -87,7 +86,7 @@ if __name__ == '__main__':
     valid_path = data_config["valid"]
     init_valid_text(valid_path)
 
-    valid_dataset = ListDataset(valid_path, img_size=settings.license_plate_model_size, augment=False, multiscale=False)
+    valid_dataset = TotalDataset(valid_path, img_size=settings.license_plate_model_size, augment=False, multiscale=False)
     valid_dataloader = torch.utils.data.DataLoader(
         valid_dataset, batch_size=1, shuffle=False, num_workers=4, collate_fn=valid_dataset.collate_fn
     )
