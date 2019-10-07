@@ -187,6 +187,7 @@ class TotalDataset(Dataset):
         # Extract image as PyTorch tensor
         original_img = Image.open(img_path).convert('RGB')
         img = transforms.ToTensor()(original_img)
+        original_img = img.permute(1,2,0).numpy() # shape [w, h, 3]
 
         # Handle images with less than three channels
         if len(img.shape) != 3:
@@ -257,6 +258,7 @@ class TotalDataset(Dataset):
         for i, boxes in enumerate(targets_):
             boxes[:, 0] = i
         targets = torch.cat(targets, 0)
+        targets_ = torch.cat(targets_, 0)
         # Selects new image size every tenth batch
         if self.multiscale and self.batch_count % 10 == 0:
             self.img_size = random.choice(range(self.min_size, self.max_size + 1, 32))

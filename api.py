@@ -14,7 +14,6 @@ class IntegratedApi:
         :param image: RGB with 0~255
         :return: Dict("face" : list[(x1, y1, x2, y2, score)], "license_plate": list[(x1, y1, x2, y2, score)]) : each coordinates are real pixel values
         """
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         result = {
                     "face" : [],
                     "license_plate" : []

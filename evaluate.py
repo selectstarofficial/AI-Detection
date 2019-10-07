@@ -36,26 +36,19 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     for batch_i, (_, imgs, original_img, targets, targets_) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
-        ### DEBUG CODE ###
-        #new_img = imgs.clone()
-        #new_img = new_img.permute(0,2,3,1).cpu().numpy()[0]
-        #plt.imshow(new_img)
-        #plt.show()
-        ######
-
         # Extract labels
         labels += targets[:, 1].tolist()
-        #print(targets[:, 1].tolist())
         # Rescale target
         targets[:, 2:] = xywh2xyxy(targets[:, 2:])
         targets[:, 2:] *= img_size
 
         # 1. detect license plate
-        imgs = Variable(imgs.to(device), requires_grad=False)
         lplate_outputs = lplateModel.detect(imgs, mode="eval", threshold=conf_thres) # list[(x1,y1,x2,y2,obj_conf, class_score, class_pred)]
         
         # 2. detect face
-        face_outputs = faceModel.detect(original_img) # list[(x1,y1,x2,y2,score)]
+        face_outputs = faceModel.detect(original_img[0]) # list[(x1,y1,x2,y2,score)]
+        print(original_img[0].shape)
+        print(face_outputs)
         
         # 3. concatenate output
         lplate_outputs = lplate_outputs[0]
@@ -69,7 +62,10 @@ def evaluate(lplateModel, faceModel, dataloader, iou_thres, conf_thres, nms_thre
         if lplate_outputs is not None:
             outputs = torch.cat((lplate_outputs, outputs), axis = 0)
         outputs = [outputs]
-        sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
+        try:
+            sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
+        except:
+            pass
 
     # Concatenate sample statistics
     true_positives, pred_scores, pred_labels = [np.concatenate(x, 0) for x in list(zip(*sample_metrics))]
