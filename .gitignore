@@ -9,6 +9,7 @@ backup
 weights/*
 __pycache__
 checkpoints/*.pth
+.vscode/
 .idea/
 *.swp
 *.swo
