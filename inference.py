@@ -1,6 +1,6 @@
 from face_detection_api import FaceDetector
 from license_plate_api import LicensePlateDetector
-import cv2
+import csv
 import os
 import os.path as osp
 import numpy as np
@@ -28,10 +28,12 @@ class ImageClass:
 
 local = False
 if local:
-    input_dir = "/Users/litcoderr/Desktop/Projects/dataset/input"
+    input_root = "/Users/litcoderr/Desktop/Projects/dataset/input/"
+    valid_text = "/Users/litcoderr/Desktop/Projects/dataset/valid.txt"
     output_dir = "/Users/litcoderr/Desktop/Projects/dataset/output"
 else:
-    input_dir = "./license_plate_api/data/custom/images/"
+    input_root = "./license_plate_api/"
+    valid_text = "./license_plate_api/data/custom/valid.txt"
     output_dir = "./license_plate_api/data/custom/output/"
 
 class_index = {
@@ -39,14 +41,25 @@ class_index = {
     "face" : 1
 }
 
+class ImageData:
+    def __init__(self, name):
+        self.name = name
+        self.image_paths=[]
+
+def get_dataset(root, valid_text):
+    dataset = [ImageData('custom')]
+    with open(valid_text) as csv_file:
+        reader = csv.reader(csv_file, delimiter=",")
+        for row in reader:
+            image_dir = os.path.join(root,row[0])
+            dataset[0].image_paths.append(image_dir)
+
+    return dataset
+
 if __name__ == '__main__':
     settings = Settings()
 
-    if not osp.exists(input_dir):
-        raise FileNotFoundError(f"{input_dir} directory not exists.")
-    os.makedirs(output_dir, exist_ok=True)
-
-    dataset = utils.get_dataset(input_dir)
+    dataset = get_dataset(input_root, valid_text)
 
     images = {}  # path: ImageClass
 
