@@ -10,7 +10,8 @@ def get_dataset(path, has_class_directories=True):
     dataset = []
     path_exp = os.path.expanduser(path)
     classes = [path for path in os.listdir(path_exp) \
-                    if os.path.isdir(os.path.join(path_exp, path))]
+                if os.path.isdir(os.path.join(path_exp, path))]
+
     classes.sort()
     nrof_classes = len(classes)
     for i in range(nrof_classes):
