@@ -157,7 +157,7 @@ def get_batch_statistics(outputs, targets, iou_threshold):
 
         true_positives = np.zeros(pred_boxes.shape[0])
 
-        annotations = targets[:, 1:]
+        annotations = targets[targets[:, 0] == sample_i][:, 1:]
         target_labels = annotations[:, 0] if len(annotations) else []
         if len(annotations):
             detected_boxes = []
