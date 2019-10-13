@@ -41,7 +41,7 @@ def parse_label(path, width, height):
 
     return result
 
-def parse_prediction(pred):  # format [Tensor([x1,y1,x2,y2,1,1,label])]
+def parse_prediction(pred):  # format [Tensor([x1,y1,x2,y2,1,label])]
     data = []
     for elem in pred:
         label = elem[2]
@@ -49,7 +49,7 @@ def parse_prediction(pred):  # format [Tensor([x1,y1,x2,y2,1,1,label])]
         ymin = elem[4]
         xmax = elem[5]
         ymax = elem[6]
-        data.append([xmin, ymin, xmax, ymax, 1, 1, label])
+        data.append([xmin, ymin, xmax, ymax, 1, label])
     data = [torch.Tensor(data)]
     return data
 
