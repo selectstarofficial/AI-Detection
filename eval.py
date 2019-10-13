@@ -6,7 +6,7 @@ import numpy as np
 
 from license_plate_api.utils.utils import *
 
-local = False
+local = True
 labels = [0, 1]
 if local:
     output_file_name = "/Users/litcoderr/Desktop/Projects/dataset/output/custom/custom.txt"
@@ -45,11 +45,12 @@ def parse_prediction(pred):  # format [Tensor([x1,y1,x2,y2,1,label])]
     data = []
     for elem in pred:
         label = elem[2]
-        xmin = elem[3]
-        ymin = elem[4]
-        xmax = elem[5]
-        ymax = elem[6]
-        data.append([xmin, ymin, xmax, ymax, 1, label])
+        score = elem[3]
+        xmin = elem[4]
+        ymin = elem[5]
+        xmax = elem[6]
+        ymax = elem[7]
+        data.append([xmin, ymin, xmax, ymax, score, label])
     data = [torch.Tensor(data)]
     return data
 
