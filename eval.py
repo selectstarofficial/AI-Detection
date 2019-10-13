@@ -65,14 +65,15 @@ if __name__ == '__main__':
         prediction = output[image_name]
         label_path = os.path.join(label_dir, "{}.txt".format(image_name))
 
-        width = prediction[0][0]
-        height = prediction[0][1]
+        if len(prediction) != 0:
+            width = prediction[0][0]
+            height = prediction[0][1]
 
-        if os.path.exists(label_path):  # if path exist, start evaluation for this image
-            label = parse_label(label_path, width, height)
-            prediction = parse_prediction(prediction)
+            if os.path.exists(label_path):  # if path exist, start evaluation for this image
+                label = parse_label(label_path, width, height)
+                prediction = parse_prediction(prediction)
 
-            metric += get_batch_statistics(prediction, label, iou_threshold=0.5)
+                metric += get_batch_statistics(prediction, label, iou_threshold=0.5)
 
     true_positives, pred_scores, pred_labels = [np.concatenate(x, 0) for x in list(zip(*metric))]
     precision, recall, AP, f1, ap_class = ap_per_class(true_positives, pred_scores, pred_labels, labels)
