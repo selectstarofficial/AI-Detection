@@ -12,7 +12,7 @@ if local:
     output_file_name = "/Users/litcoderr/Desktop/Projects/dataset/output/custom/custom.txt"
     label_dir = "/Users/litcoderr/Desktop/Projects/dataset/label"
 else:
-    output_file_name = "./license_plate_api/data/custom/output/dataset1/dataset1.txt"
+    output_file_name = "./license_plate_api/data/custom/output/dataset1/custom.txt"
     label_dir = "./license_plate_api/data/custom/labels"
 
 def parse_label(path, width, height):
