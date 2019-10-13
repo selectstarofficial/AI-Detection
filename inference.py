@@ -126,7 +126,7 @@ if __name__ == '__main__':
         save_class_dir = osp.join(output_dir, cls.name)
         cls.image_paths = sorted(cls.image_paths)
 
-        save_path = osp.join(save_class_dir, '{}.json'.format(cls.name))
+        save_path = osp.join(save_class_dir, '{}.txt'.format(cls.name))
 
         with open(save_path, 'w') as file:
             result = {}
