@@ -6,7 +6,7 @@ import numpy as np
 
 from license_plate_api.utils.utils import *
 
-local = True
+local = False
 labels = [0, 1]
 if local:
     output_file_name = "/Users/litcoderr/Desktop/Projects/dataset/output/custom/custom.txt"
