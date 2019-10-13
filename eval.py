@@ -2,10 +2,12 @@ import os
 import csv
 import json
 import torch
+import numpy as np
 
 from license_plate_api.utils.utils import *
 
-local = True
+local = False
+labels = [0, 1]
 if local:
     output_file_name = "/Users/litcoderr/Desktop/Projects/dataset/output/custom/custom.txt"
     label_dir = "/Users/litcoderr/Desktop/Projects/dataset/label"
@@ -39,15 +41,26 @@ def parse_label(path, width, height):
 
     return result
 
-def parse_prediction(pred):
-#TODO Parse prediction based on format
-    return None
+def parse_prediction(pred):  # format [Tensor([x1,y1,x2,y2,1,1,label])]
+    data = []
+    for elem in pred:
+        label = elem[2]
+        xmin = elem[3]
+        ymin = elem[4]
+        xmax = elem[5]
+        ymax = elem[6]
+        data.append([xmin, ymin, xmax, ymax, 1, 1, label])
+    data = [torch.Tensor(data)]
+    return data
 
 if __name__ == '__main__':
     # load output
     with open(output_file_name) as json_file:
         output = json.load(json_file)
 
+    print("Start Computing Metric")
+    # Compute Metric
+    metric = []
     for image_name in output.keys():
         prediction = output[image_name]
         label_path = os.path.join(label_dir, "{}.txt".format(image_name))
@@ -59,3 +72,9 @@ if __name__ == '__main__':
             label = parse_label(label_path, width, height)
             prediction = parse_prediction(prediction)
 
+            metric += get_batch_statistics(prediction, label, iou_threshold=0.5)
+
+    true_positives, pred_scores, pred_labels = [np.concatenate(x, 0) for x in list(zip(*metric))]
+    precision, recall, AP, f1, ap_class = ap_per_class(true_positives, pred_scores, pred_labels, labels)
+    print("precision: {}\nrecall: {}\nAP: {}\nf1: {}\nap_class: {}".format(precision, recall, AP, f1, ap_class))
+    print("Finished")
