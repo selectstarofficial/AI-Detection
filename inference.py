@@ -146,7 +146,7 @@ if __name__ == '__main__':
                         xmax = min(max(b.x1, b.x2), info.width)
                         ymax = min(max(b.y1, b.y2), info.height)
                         label = b.label
-                        data.append([class_index[label], xmin, ymin, xmax, ymax])
+                        data.append([width, height, class_index[label], xmin, ymin, xmax, ymax])
                     else:
                         raise TypeError("bbox object should be instance of BBoxClass")
                 result[name] = data
