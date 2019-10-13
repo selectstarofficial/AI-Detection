@@ -17,3 +17,4 @@ checkpoints/*.pth
 *.ipynb_checkpoints
 test_photos/
 total_dataset_config/valid.txt
+license_plate_api/data/

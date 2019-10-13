@@ -26,13 +26,13 @@ class ImageClass:
         self.height = height
         self.bbox_list = [] # type: [BBoxClass]
 
-local = True
+local = False
 if local:
     input_dir = "/Users/litcoderr/Desktop/Projects/dataset/input"
     output_dir = "/Users/litcoderr/Desktop/Projects/dataset/output"
 else:
-    input_dir = "./license_plate_api/data/custom/images"
-    output_dir = "./license_plate_api/data/custom/output"
+    input_dir = "./license_plate_api/data/custom/images/"
+    output_dir = "./license_plate_api/data/custom/output/"
 
 class_index = {
     "license_plate" : 0,
