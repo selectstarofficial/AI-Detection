@@ -26,13 +26,13 @@ class ImageClass:
         self.height = height
         self.bbox_list = [] # type: [BBoxClass]
 
-local = True
+local = False
 if local:
     input_dir = "/Users/litcoderr/Desktop/Projects/dataset/input"
     output_dir = "/Users/litcoderr/Desktop/Projects/dataset/output"
 else:
-    input_dir = "./license_plate_api/data/custom/images"
-    output_dir = "./license_plate_api/data/custom/output"
+    input_dir = "./license_plate_api/data/custom/images/"
+    output_dir = "./license_plate_api/data/custom/output/"
 
 class_index = {
     "license_plate" : 0,
@@ -126,7 +126,7 @@ if __name__ == '__main__':
         save_class_dir = osp.join(output_dir, cls.name)
         cls.image_paths = sorted(cls.image_paths)
 
-        save_path = osp.join(save_class_dir, '{}.json'.format(cls.name))
+        save_path = osp.join(save_class_dir, '{}.txt'.format(cls.name))
 
         with open(save_path, 'w') as file:
             result = {}
