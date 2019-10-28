@@ -26,7 +26,7 @@ class ImageClass:
         self.height = height
         self.bbox_list = [] # type: [BBoxClass]
 
-local = False
+local = True
 if local:
     input_root = "/Users/litcoderr/Desktop/Projects/dataset/input/custom/"
     valid_text = "/Users/litcoderr/Desktop/Projects/dataset/valid.txt"
@@ -187,16 +187,14 @@ if __name__ == '__main__':
         os.unlink(path)
 
     # 2. Move newly created results and labels
-    result_files = [name for name in os.listdir(save_class_dir) if name.endswith(".txt")]
-    label_files = [name for name in os.listdir(label_dir) if name.endswith(".txt")]
+    file_names = [name for name in os.listdir(save_class_dir) if name.endswith(".txt")]
 
-    for name in result_files:
+    for name in file_names:
         original_path = os.path.join(save_class_dir, name)
         dest_path = os.path.join(result_dest, name)
         shutil.copy(original_path, dest_path)
         print("[{}] -> [{}]".format(original_path, dest_path))
 
-    for name in label_files:
         original_path = os.path.join(label_dir, name)
         dest_path = os.path.join(label_dest, name)
         shutil.copy(original_path, dest_path)
