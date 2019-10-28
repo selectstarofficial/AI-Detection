@@ -26,7 +26,7 @@ class ImageClass:
         self.height = height
         self.bbox_list = [] # type: [BBoxClass]
 
-local = True
+local = False
 if local:
     input_root = "/Users/litcoderr/Desktop/Projects/dataset/input/custom/"
     valid_text = "/Users/litcoderr/Desktop/Projects/dataset/valid.txt"
