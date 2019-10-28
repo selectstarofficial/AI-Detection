@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 from settings import Settings
 import utils
-import json
+import shutil
 
 class BBoxClass:
     def __init__(self, label, x1, y1, x2, y2, score):
@@ -31,10 +31,16 @@ if local:
     input_root = "/Users/litcoderr/Desktop/Projects/dataset/input/custom/"
     valid_text = "/Users/litcoderr/Desktop/Projects/dataset/valid.txt"
     output_dir = "/Users/litcoderr/Desktop/Projects/dataset/output"
+    label_dir = "/Users/litcoderr/Desktop/Projects/dataset/label"
+    map_dir = "/Users/litcoderr/Desktop/Projects/map/input"
 else:
     input_root = "./license_plate_api/data/custom/images/dataset1"
     valid_text = "./license_plate_api/data/custom/valid.txt"
     output_dir = "./license_plate_api/data/custom/output/"
+    label_dir = "./license_plate_api/data/custom/labels"
+    map_dir = "../map_api/input"
+
+
 
 class_index = {
     "license_plate" : 0,
@@ -134,38 +140,66 @@ if __name__ == '__main__':
 
 
     ### GENERATE JSON ###
-    print('Generating JSON file...')
+    print('Generating Label Text file...')
     for cls in dataset:
         save_class_dir = osp.join(output_dir, cls.name)
         cls.image_paths = sorted(cls.image_paths)
 
-        save_path = osp.join(save_class_dir, '{}.txt'.format(cls.name))
-
-        with open(save_path, 'w') as file:
-            result = {}
-            for i, image_path in enumerate(cls.image_paths):
-                print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
+        for i, image_path in enumerate(cls.image_paths):
+            image_name = image_path.split("/")[-1]
+            file_name = os.path.join(save_class_dir, "{}.txt".format(image_name))
+            print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
+            with open(file_name, "w") as file:
                 info = images[image_path]
                 id = info.id
                 name = os.path.split(image_path)[-1]
                 width = info.width
                 height = info.height
 
-                data = []
+                data = ""
                 for b in info.bbox_list:
                     if isinstance(b, BBoxClass):
-                        xmin = max(min(b.x1, b.x2), 0)
-                        ymin = max(min(b.y1, b.y2), 0)
-                        xmax = min(max(b.x1, b.x2), info.width)
-                        ymax = min(max(b.y1, b.y2), info.height)
-                        label = b.label
+                        xmin = max(min(b.x1, b.x2)/width, 0)
+                        ymin = max(min(b.y1, b.y2)/height, 0)
+                        xmax = min(max(b.x1, b.x2)/width, info.width)
+                        ymax = min(max(b.y1, b.y2)/height, info.height)
+                        label = class_index[b.label]
                         score = b.score
-                        data.append([width, height, class_index[label], score, xmin, ymin, xmax, ymax])
+                        line = "{label} {score} {xmin} {ymin} {xmax} {ymax}\n".format(label=label, score=score, xmin=xmin, ymin=ymin, xmax=xmax, ymax=ymax)
+                        data += line
                     else:
                         raise TypeError("bbox object should be instance of BBoxClass")
-                result[name] = data
+                file.write(data)
+                file.close()
+    print('Label File Dest: {}'.format(save_class_dir))
 
-            json.dump(result, file)
-        file.close()
+
+    ### Move result file to MAP api folder for performance checking
+    result_dest = os.path.join(map_dir, "detection-results")
+    label_dest = os.path.join(map_dir, "ground-truth")
+    # 1. remove existing files
+    for file in os.listdir(result_dest):
+        path = os.path.join(result_dest, file)
+        os.unlink(path)
+
+    for file in os.listdir(label_dest):
+        path = os.path.join(label_dest, file)
+        os.unlink(path)
+
+    # 2. Move newly created results and labels
+    result_files = [name for name in os.listdir(save_class_dir) if name.endswith(".txt")]
+    label_files = [name for name in os.listdir(label_dir) if name.endswith(".txt")]
+
+    for name in result_files:
+        original_path = os.path.join(save_class_dir, name)
+        dest_path = os.path.join(result_dest, name)
+        shutil.copy(original_path, dest_path)
+        print("[{}] -> [{}]".format(original_path, dest_path))
+
+    for name in label_files:
+        original_path = os.path.join(label_dir, name)
+        dest_path = os.path.join(label_dest, name)
+        shutil.copy(original_path, dest_path)
+        print("[{}] -> [{}]".format(original_path, dest_path))
 
     print('Done.')
