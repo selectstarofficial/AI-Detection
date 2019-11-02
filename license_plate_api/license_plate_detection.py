@@ -2,22 +2,24 @@ import cv2
 import os
 import torch
 from .models import Darknet
+from .utils.parse_config import *
 from .utils.utils import load_classes, non_max_suppression, rescale_boxes
 from .utils.datasets import pad_to_square, resize
-from settings import Settings
 import torchvision.transforms as transforms
 from PIL import Image
 
-# TODO Make License Plate Detector -> Refer to detect.py in license_plate_api
 class LicensePlateDetector:
-    def __init__(self, settings: Settings):
+    def __init__(self, settings):
         # Model Config
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         root = os.path.dirname(os.path.realpath(__file__))
-        self.weight_path = os.path.join(root, 'model', 'yolov3_ckpt_98.pth')
+        self.weight_path = os.path.join(root, 'model','yolov3_ckpt_54.pth')
         self.model_cfg = os.path.join(root, 'model', 'yolov3-custom.cfg')
-        self.class_pth = os.path.join(root, 'model', 'classes.names')  # TODO add classes names file from cloud
+
+        config_path = os.path.join(root, 'model', 'custom.data')
+        self.data_config = parse_data_config(config_path)
+
         self.img_size = settings.license_plate_model_size
         self.conf_thres = settings.license_plate_threshold
         self.nms_thres = 0.4
@@ -33,7 +35,7 @@ class LicensePlateDetector:
         self.model.eval()
 
         # Load Classes Info
-        self.classes = load_classes(self.class_pth)
+        self.classes = load_classes(os.path.join(root, self.data_config["names"]))
 
     def preprocess(self, rgb_image):
         # Extract image as PyTorch tensor
@@ -68,11 +70,13 @@ class LicensePlateDetector:
         detections = rescale_boxes(detections, self.img_size, rgb_image.shape[:2])
         detections = detections.detach().cpu().numpy()
 
-        result = []
+        bbox_result = []
+        label_result = []
         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
-            result.append((x1, y1, x2, y2, conf))
+            bbox_result.append((x1, y1, x2, y2, conf))
+            label_result.append(cls_pred)
 
-        return result
+        return bbox_result, label_result
 
 
     # def detect(self, image, threshold=0.5):
@@ -102,3 +106,4 @@ class LicensePlateDetector:
     #
     #     return detections
     #
+

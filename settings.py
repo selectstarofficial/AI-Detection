@@ -17,3 +17,4 @@ class Settings:
     license_plate_model_size = 704  # 모델이 학습된 크기입니다. 이 값은 바꾸지 마세요.
     xml_face_name = 'face'  # XML 파일에서 얼굴 태그의 라벨 이름을 지정합니다.
     xml_license_plate_name = 'license_plate'  # XML 파일에서 번호판 태그의 라벨 이름을 지정합니다.
+    config_path = 'license_plate_api/model/custom.data'
