@@ -56,7 +56,7 @@ class ImageFolder(Dataset):
 
 
 class ListDataset(Dataset):
-    def __init__(self, list_path, img_size=416, augment=True, multiscale=True, normalized_labels=True):
+    def __init__(self, dataset_root, list_path, img_size=416, augment=True, multiscale=True, normalized_labels=True):
         with open(list_path, "r") as file:
             img_label = file.read().splitlines()
 
@@ -65,6 +65,8 @@ class ListDataset(Dataset):
 
         for line in img_label:
             img, label = line.split(',')
+            img = f'{dataset_root}/{img}'
+            label = f'{dataset_root}/{label}'
             self.img_files.append(img)
             self.label_files.append(label)
 

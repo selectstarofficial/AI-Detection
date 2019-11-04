@@ -43,12 +43,12 @@ def get_dataset(root, valid_text):
 
     return dataset
 
-input_root = "../dataset/bbox/custom/images/"
-valid_text = "../dataset/bbox/custom/valid.txt"
-output_dir = "../dataset/bbox/custom/output/"
-label_dir = "../dataset/bbox/custom/labels/"
-initial_save_path = "../dataset/bbox/temp/"
-map_dir = "../map_api/input"
+input_root = "../../dataset/bbox/custom/images/"
+valid_text = "../../dataset/bbox/custom/valid.txt"
+output_dir = "../../dataset/bbox/custom/output/"
+label_dir = "../../dataset/bbox/custom/labels/"
+initial_save_path = "../../dataset/bbox/temp/"
+map_dir = "../../map_api/input"
 
 if __name__ == '__main__':
     settings = Settings()
@@ -91,7 +91,11 @@ if __name__ == '__main__':
             img_info = ImageClass(global_img_id, image_path, img_width, img_height)
 
             # get bbox result
-            bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
+            try:
+                bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
+            except:
+                images[image_path] = img_info
+                continue
             bboxes = utils.make_bbox_small(bboxes, settings.license_plate_bbox_width_ratio, settings.license_plate_bbox_height_ratio)
             bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
 
