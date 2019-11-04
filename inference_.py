@@ -43,12 +43,22 @@ def get_dataset(root, valid_text):
 
     return dataset
 
-input_root = "../../dataset/bbox/custom/images/"
-valid_text = "../../dataset/bbox/custom/valid.txt"
-output_dir = "../../dataset/bbox/custom/output/"
-label_dir = "../../dataset/bbox/custom/labels/"
-initial_save_path = "../../dataset/bbox/temp/"
-map_dir = "../../map_api/input"
+is_server = False
+if is_server:
+    input_root = "../../dataset/bbox/custom/images/"
+    valid_text = "../../dataset/bbox/custom/valid.txt"
+    output_dir = "../../dataset/bbox/custom/output/"
+    label_dir = "../../dataset/bbox/custom/labels_xyxy/"
+    initial_save_path = "../../dataset/bbox/temp/"
+    map_dir = "../../map_api/input"
+else:
+    input_root = "../dataset/bbox/custom/images/"
+    valid_text = "../dataset/bbox/custom/valid.txt"
+    output_dir = "../dataset/bbox/custom/output/"
+    label_dir = "../dataset/bbox/custom/labels_xyxy/"
+    initial_save_path = "../dataset/bbox/temp/"
+    map_dir = "../map_api/input"
+
 
 if __name__ == '__main__':
     settings = Settings()
