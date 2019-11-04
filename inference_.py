@@ -43,7 +43,7 @@ def get_dataset(root, valid_text):
 
     return dataset
 
-is_server = False
+is_server = True
 if is_server:
     input_root = "../../dataset/bbox/custom/images/"
     valid_text = "../../dataset/bbox/custom/valid.txt"
@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
         print("[{}/{}] {}".format(idx+1, img_len, result_save_path))
         with open(result_save_path, 'w') as file:
-            for bbox in images[image_path].bbox_list:
+            for bbox in images[img_path].bbox_list:
                 result_string = '{label} {score} {x1} {y1} {x2} {y2}\n'.format(
                     label=bbox.label, score=bbox.score, x1=bbox.x1, y1=bbox.y1, x2=bbox.x2, y2=bbox.y2)
                 file.write(result_string)
