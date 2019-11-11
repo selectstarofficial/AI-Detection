@@ -5,8 +5,10 @@ from .models import Darknet
 from .utils.parse_config import *
 from .utils.utils import load_classes, non_max_suppression, rescale_boxes
 from .utils.datasets import pad_to_square, resize
+from .utils.google_drive import download_file_from_google_drive
 import torchvision.transforms as transforms
 from PIL import Image
+
 
 class Detector:
     def __init__(self, settings):
@@ -15,6 +17,9 @@ class Detector:
 
         root = os.path.dirname(os.path.realpath(__file__))
         self.weight_path = os.path.join(root, 'model','yolov3_ckpt_54.pth')
+
+        self.validate_weightfile(self.weight_path)
+
         self.model_cfg = os.path.join(root, 'model', 'yolov3-custom.cfg')
 
         config_path = os.path.join(root, 'model', 'custom.data')
@@ -77,31 +82,9 @@ class Detector:
 
         return bbox_result, label_result
 
-
-    # def detect(self, image, threshold=0.5):
-    #     mode = self.mode
-    #     # 1. reformat image for input
-    #     if mode=="inference":
-    #         image_ = cv2.resize(image, (self.img_size, self.img_size))
-    #         image_ = torch.Tensor(image_).permute(2,0,1).unsqueeze(0).to(self.device)
-    #     else:
-    #         image_ = image.to(self.device)
-    #
-    #     # 2. inference
-    #     result = self.model(image_)
-    #     result = non_max_suppression(result, conf_thres=threshold, nms_thres=self.nms_thres)
-    #
-    #     if mode=="inference":
-    #         result = result[0].cpu().numpy()
-    #
-    #         detections = []
-    #         # 3. resize to original image size
-    #         if result is not None:
-    #             detections = rescale_boxes(result, self.img_size, image.shape[:2])
-    #             detections = detections[detections[:, -1]==0]
-    #             detections = detections[:,:5]
-    #     else:
-    #         detections = result
-    #
-    #     return detections
-    #
+    def validate_weightfile(self, weight_path):
+        file_id = '19PAqfkumy7XijdvZsxORh0VTZuQhAltg'
+        if not os.path.exists(weight_path):
+            print('start downloading weight from cloud...')
+            download_file_from_google_drive(file_id, weight_path)
+            print('finished downloading weight')
