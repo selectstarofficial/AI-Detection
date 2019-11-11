@@ -59,6 +59,9 @@ if __name__ == '__main__':
         save_class_dir = osp.join(settings.output_dir, cls.name)
         cls.image_paths = sorted(cls.image_paths)
 
+        if not os.path.exists(save_class_dir):
+            os.mkdir(save_class_dir)
+
         for i, image_path in enumerate(cls.image_paths):
             print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
 
