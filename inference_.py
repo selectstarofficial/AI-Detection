@@ -1,6 +1,6 @@
-from license_plate_api import LicensePlateDetector
-from license_plate_api.utils.parse_config import *
-from license_plate_api.utils.utils import *
+from detection_api import Detector
+from detection_api.utils.parse_config import *
+from detection_api.utils.utils import *
 import shutil
 import csv
 import os
@@ -9,6 +9,10 @@ import numpy as np
 from PIL import Image
 from settings import Settings
 import utils
+
+"""
+This code inference validation sets for mAP calculation
+"""
 
 class BBoxClass:
     def __init__(self, label, x1, y1, x2, y2, score):
@@ -72,7 +76,7 @@ if __name__ == '__main__':
 
     root = os.path.dirname(os.path.realpath(__file__))
     data_config = parse_data_config(os.path.join(root, settings.config_path))
-    classes = load_classes(os.path.join(root, "license_plate_api", data_config["names"]))
+    classes = load_classes(os.path.join(root, "detection_api", data_config["names"]))
 
     images = {}  # path: ImageClass
 
@@ -81,7 +85,7 @@ if __name__ == '__main__':
     print('Start Detection...')
 
     print('Creating networks and loading parameters')
-    license_plate_api = LicensePlateDetector(settings)
+    license_plate_api = Detector(settings)
     print('Preparing detector...')
     license_plate_api.detect(np.zeros((1080, 1920, 3), dtype=np.uint8))
 

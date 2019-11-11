@@ -1,5 +1,6 @@
-from face_detection_api import FaceDetector
-from license_plate_api import LicensePlateDetector
+from detection_api import Detector
+from detection_api.utils.parse_config import *
+from detection_api.utils.utils import *
 import cv2
 import os
 import os.path as osp
@@ -34,22 +35,28 @@ if __name__ == '__main__':
         raise FileNotFoundError(f"{settings.input_dir} directory not exists.")
     os.makedirs(settings.output_dir, exist_ok=True)
 
+    root = os.path.dirname(os.path.realpath(__file__))
+    data_config = parse_data_config(os.path.join(root, settings.config_path))
+    classes = load_classes(os.path.join(root, "detection_api", data_config["names"]))
+    if not osp.exists(settings.input_dir):
+        raise FileNotFoundError(f"{settings.input_dir} directory not exists.")
+    os.makedirs(settings.output_dir, exist_ok=True)
+
     dataset = utils.get_dataset(settings.input_dir)
 
     images = {}  # path: ImageClass
 
-    ### FACE DETECTION ###
-    print('Detecting faces...')
+    ### DETECTION ###
+    print('Start Detection...')
 
     print('Creating networks and loading parameters')
-    face_api = FaceDetector(settings)
+    license_plate_api = Detector(settings)
     print('Preparing detector...')
-    face_api.detect(np.zeros((1080, 1920, 3), dtype=np.uint8))
+    license_plate_api.detect(np.zeros((1080, 1920, 3), dtype=np.uint8))
 
     global_img_id = 0
     for cls in dataset:
         save_class_dir = osp.join(settings.output_dir, cls.name)
-        os.makedirs(save_class_dir, exist_ok=True)
         cls.image_paths = sorted(cls.image_paths)
 
         for i, image_path in enumerate(cls.image_paths):
@@ -59,53 +66,22 @@ if __name__ == '__main__':
 
             img_height, img_width = img.shape[0:2]
 
-            bboxes = face_api.detect(img)  # (x1, y1, x2, y2, score)
-            bboxes = utils.make_bbox_small(bboxes, settings.face_bbox_width_ratio, settings.face_bbox_height_ratio)
-            bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
-
+            # Register image info
             img_info = ImageClass(global_img_id, image_path, img_width, img_height)
 
-            for bbox in bboxes:
-                x1, y1, x2, y2, score = bbox
-                bbox_info = BBoxClass(settings.xml_face_name, x1, y1, x2, y2, score)
-                img_info.bbox_list.append(bbox_info)
-
-            images[image_path] = img_info
-
-            global_img_id += 1
-
-
-    ### RELEASE MEMORY ####
-    face_api.release_memory()
-    del face_api
-
-    ### LICENSE PLATE DETECTION ###
-    print('Detecting license plates...')
-
-    print('Creating networks and loading parameters')
-    license_plate_api = LicensePlateDetector(settings)
-    print('Preparing detector...')
-    license_plate_api.detect(np.zeros((1080, 1920, 3), dtype=np.uint8))
-
-    for cls in dataset:
-        save_class_dir = osp.join(settings.output_dir, cls.name)
-        cls.image_paths = sorted(cls.image_paths)
-
-        for i, image_path in enumerate(cls.image_paths):
-            print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
-
-            img = np.array(Image.open(image_path).convert('RGB'))
-
-            img_height, img_width = img.shape[0:2]
-
-            bboxes = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
+            # get bbox result
+            bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
             bboxes = utils.make_bbox_small(bboxes, settings.license_plate_bbox_width_ratio, settings.license_plate_bbox_height_ratio)
             bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
 
-            for bbox in bboxes:
+            for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
-                bbox_info = BBoxClass(settings.xml_license_plate_name, x1, y1, x2, y2, score)
-                images[image_path].bbox_list.append(bbox_info)
+                label = classes[int(labels[idx])]
+                bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
+                img_info.bbox_list.append(bbox_info)
+            images[image_path] = img_info
+
+        global_img_id += 1
 
 
     ### RENDERING RESULT ###

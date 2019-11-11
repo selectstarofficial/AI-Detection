@@ -1,1 +1,0 @@
-from .license_plate_detection import LicensePlateDetector
