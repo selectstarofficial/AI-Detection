@@ -1,15 +1,16 @@
+.vscode
 data/*
 .DS_Store
 build
 .git
 *.egg-info
 dist
-output
 data/coco
 backup
 weights/*
 __pycache__
 checkpoints/*.pth
+.vscode/
 .idea/
 *.swp
 *.swo
@@ -17,6 +18,7 @@ checkpoints/*.pth
 *.ipynb_checkpoints
 test_photos/
 total_dataset_config/valid.txt
+license_plate_api/data/
 *.pyc
 __pycache__/
 detection_api/*
