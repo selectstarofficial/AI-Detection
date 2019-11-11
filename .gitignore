@@ -19,3 +19,5 @@ test_photos/
 total_dataset_config/valid.txt
 *.pyc
 __pycache__/
+detection_api/*
+.vscode
