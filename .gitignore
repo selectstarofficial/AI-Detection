@@ -21,5 +21,4 @@ total_dataset_config/valid.txt
 license_plate_api/data/
 *.pyc
 __pycache__/
-detection_api/*
 .vscode
