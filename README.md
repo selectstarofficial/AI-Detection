@@ -7,12 +7,13 @@
 #### YOLO v3 모델 소개
 대표적인 Real-Time Object Detection의 state-of-the-art 모델로 COCO 데이터셋을 학습시 30FPS 에 mAP 57.9% 성능을 자랑한다
 <p align="center">
-  <img src="./contents/yolov3.jpg" width="350" title="performance_image">
+  <img src="./contents/yolov3.jpg" width="450" title="performance_image">
 </p>
 
 ## 사용법
 1. 다음 링크를 통해 Anaconda 환경을 설치해줍니다. [설치 링크](https://docs.anaconda.com/anaconda/install/windows/)
 2. 다음 명령어를 통해 새로운 Anaconda 가상 환경을 만들고 Dependency 를 설치합니다.
+
     2.1. 리포지토리 위치로 이동
     ```bash
     cd [absolute_path_to_repository]
@@ -42,3 +43,13 @@
     python main.py
     ```
 5. ```ouput``` 폴더에 결과가 출력됩니다.
+
+## 성능
+Class | AP
+------------ | -------------
+Face | 38.43
+License Plate | 86.08
+
+Model | MAP
+------------ | -------------
+Our Model | 62.25
