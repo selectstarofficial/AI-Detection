@@ -3,18 +3,29 @@
     <box label="face" xtl="1392.0" ytl="402.0" xbr="1464.0" ybr="486.0"/>
     <box label="car_plate" xtl="1016.9972" ytl="454.7531" xbr="1045.7351" ybr="462.48456"/>
     <box label="face" xtl="1254.2628" ytl="374.3949" xbr="1261.0497" ybr="384.28076"/>
-    <box label="face" xtl="1241.431" ytl="373.11792" xbr="1248.2372" ybr="382.5693"/>
+    <box label="face" xtl="1242.9025" ytl="373.56363" xbr="1249.5107" ybr="382.5677"/>
     <box label="face" xtl="678.32605" ytl="397.23868" xbr="684.79584" ybr="406.4998"/>
-    <box label="face" xtl="1101.018" ytl="408.8447" xbr="1107.1807" ybr="417.19516"/>
+    <box label="face" xtl="1101.479" ytl="407.30603" xbr="1107.4368" ybr="415.2896"/>
     <box label="face" xtl="1273.632" ytl="376.16373" xbr="1279.5946" ybr="384.1408"/>
-    <box label="face" xtl="1331.7856" ytl="350.57465" xbr="1340.0846" ybr="363.05396"/>
-    <box label="face" xtl="968.77924" ytl="405.12653" xbr="974.15906" ybr="412.3417"/>
+    <box label="face" xtl="1333.2516" ytl="351.7218" xbr="1341.1763" ybr="363.23047"/>
+    <box label="face" xtl="1238.3597" ytl="372.1876" xbr="1245.5793" ybr="382.57266"/>
+    <box label="face" xtl="969.1146" ytl="403.0412" xbr="974.19867" ybr="409.63248"/>
     <box label="face" xtl="851.1159" ytl="401.80756" xbr="854.99084" ybr="407.05994"/>
     <box label="face" xtl="1169.6154" ytl="395.51605" xbr="1176.3446" ybr="405.52808"/>
     <box label="face" xtl="939.87555" ytl="398.6187" xbr="944.3491" ybr="404.80292"/>
     <box label="face" xtl="845.15765" ytl="401.6047" xbr="849.11426" ybr="406.93307"/>
-    <box label="face" xtl="928.41547" ytl="410.44772" xbr="933.41327" ybr="417.1945"/>
+    <box label="face" xtl="968.4359" ytl="407.26163" xbr="974.11847" ybr="415.11548"/>
+    <box label="face" xtl="928.9925" ytl="410.916" xbr="933.82574" ybr="417.51285"/>
     <box label="face" xtl="813.57196" ytl="408.77155" xbr="817.8758" ybr="414.77374"/>
     <box label="face" xtl="986.8489" ytl="403.9756" xbr="991.5309" ybr="410.14853"/>
+    <box label="face" xtl="974.9143" ytl="403.27405" xbr="979.37085" ybr="409.20203"/>
+    <box label="face" xtl="1100.2542" ytl="402.42987" xbr="1105.5076" ybr="410.29742"/>
+    <box label="face" xtl="934.0239" ytl="402.40646" xbr="938.45056" ybr="408.3857"/>
+    <box label="face" xtl="972.1527" ytl="408.93137" xbr="977.08124" ybr="415.79807"/>
+    <box label="face" xtl="812.21466" ytl="404.38837" xbr="816.4274" ybr="409.95975"/>
+    <box label="face" xtl="981.8502" ytl="408.90482" xbr="986.4348" ybr="415.25708"/>
+    <box label="car_plate" xtl="717.3454" ytl="456.15485" xbr="728.673" ybr="464.73584"/>
+    <box label="face" xtl="840.68616" ytl="411.49365" xbr="844.43445" ybr="416.54446"/>
+    <box label="face" xtl="939.7271" ytl="402.50577" xbr="943.8226" ybr="408.19833"/>
   </image>
 </annotations>

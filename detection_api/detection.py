@@ -27,7 +27,7 @@ class Detector:
 
         self.img_size = settings.license_plate_model_size
         self.conf_thres = settings.license_plate_threshold
-        self.nms_thres = 0.2
+        self.nms_thres = 0.4
 
         # Load Model
         self.model = Darknet(self.model_cfg, img_size=self.img_size).to(self.device)
@@ -69,7 +69,7 @@ class Detector:
             detections = detections[0]  # for single batch
 
         if detections is None:
-            return []
+            return [], []
 
         detections = rescale_boxes(detections, self.img_size, rgb_image.shape[:2])
         detections = detections.detach().cpu().numpy()

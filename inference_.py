@@ -1,6 +1,8 @@
 from detection_api import Detector
 from detection_api.utils.parse_config import *
 from detection_api.utils.utils import *
+from face_detection_api.face_detection import FaceDetector
+from converge import converge_resuts
 import shutil
 import csv
 import os
@@ -66,7 +68,6 @@ else:
 
 if __name__ == '__main__':
     settings = Settings()
-
     ### CONFIG ###
     dataset = get_dataset(input_root, valid_text)
 
@@ -79,7 +80,6 @@ if __name__ == '__main__':
     classes = load_classes(os.path.join(root, "detection_api", data_config["names"]))
 
     images = {}  # path: ImageClass
-
 
     ### DETECTION ###
     print('Start Detection...')
@@ -94,6 +94,9 @@ if __name__ == '__main__':
         save_class_dir = osp.join(settings.output_dir, cls.name)
         cls.image_paths = sorted(cls.image_paths)
 
+        if not os.path.exists(save_class_dir):
+            os.mkdir(save_class_dir)
+
         for i, image_path in enumerate(cls.image_paths):
             print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
 
@@ -105,28 +108,53 @@ if __name__ == '__main__':
             img_info = ImageClass(global_img_id, image_path, img_width, img_height)
 
             # get bbox result
-            try:
-                bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
-            except:
-                images[image_path] = img_info
-                continue
-            bboxes = utils.make_bbox_small(bboxes, settings.license_plate_bbox_width_ratio, settings.license_plate_bbox_height_ratio)
+            bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
             bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
 
             for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
-                x1 = x1/img_width
-                x2 = x2/img_width
-                y1 = y1/img_height
-                y2 = y2/img_height
-                #label = classes[int(labels[idx])]
                 label = int(labels[idx])
-                bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
+                bbox_info = BBoxClass(label, x1/img_width, y1/img_height, x2/img_width, y2/img_height, score)
                 img_info.bbox_list.append(bbox_info)
             images[image_path] = img_info
 
         global_img_id += 1
+    del license_plate_api
 
+    ### DETECT BIG FACE ###
+    print('Preparing Large Face Detector...')
+    face_detector = FaceDetector(settings)
+
+    big_face_images = {}
+    global_img_id = 0
+    for cls in dataset:
+        cls.image_paths = sorted(cls.image_paths)
+        for i, image_path in enumerate(cls.image_paths):
+            print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
+
+            img = np.array(Image.open(image_path).convert('RGB'))
+
+            img_height, img_width = img.shape[0:2]
+
+            # Register image info
+            img_info = ImageClass(global_img_id, image_path, img_width, img_height)
+
+            # get bbox result
+            bboxes = face_detector.detect(img)  # (x1, y1, x2, y2, score)
+            bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
+
+            for idx, bbox in enumerate(bboxes):
+                x1, y1, x2, y2, score = bbox
+                label = 0  # Face
+                bbox_info = BBoxClass(label, x1/img_width, y1/img_height, x2/img_width, y2/img_height, score)
+                img_info.bbox_list.append(bbox_info)
+            big_face_images[image_path] = img_info
+        global_img_id += 1
+    del face_detector
+
+    ### FILTER FACE DETECTION RESULTS ###
+    print('Converging results...')
+    images = converge_resuts(images, big_face_images)
 
     ### GENERATE RESULT FILE ###
     print("Start Writing Result File...")

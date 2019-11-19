@@ -2,7 +2,7 @@ class Settings:
     input_dir = './input'  # 입력 디렉토리 위치. 서브디렉토리 구조로 되어있어야 합니다.
     output_dir = './output'  # 출력 위치
     face_threshold = 0.5  # 얼굴 인식 임계값. (0.0~1.0)
-    license_plate_threshold = 0.9  # 번호판 인식 임계값. (0.0~1.0)
+    license_plate_threshold = 0.8  # 번호판 인식 임계값. (0.0~1.0)
     bbox_red = 150  # 바운딩박스 빨간색 농도. (0~255)
     bbox_green = 150  # 바운딩박스 초록색 농도. (0~255)
     bbox_blue = 150  # 바운딩박스 파란색 농도. (0~255)
