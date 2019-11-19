@@ -114,7 +114,7 @@ if __name__ == '__main__':
             for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
                 label = int(labels[idx])
-                bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
+                bbox_info = BBoxClass(label, x1/img_width, y1/img_height, x2/img_width, y2/img_height, score)
                 img_info.bbox_list.append(bbox_info)
             images[image_path] = img_info
 
@@ -146,7 +146,7 @@ if __name__ == '__main__':
             for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
                 label = 0  # Face
-                bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
+                bbox_info = BBoxClass(label, x1/img_width, y1/img_height, x2/img_width, y2/img_height, score)
                 img_info.bbox_list.append(bbox_info)
             big_face_images[image_path] = img_info
         global_img_id += 1
