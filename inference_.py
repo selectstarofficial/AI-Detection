@@ -49,7 +49,7 @@ def get_dataset(root, valid_text):
 
     return dataset
 
-is_server = True
+is_server = False
 if is_server:
     input_root = "../../dataset/bbox/custom/images/"
     valid_text = "../../dataset/bbox/custom/valid.txt"
