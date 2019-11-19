@@ -68,6 +68,8 @@ else:
 
 if __name__ == '__main__':
     settings = Settings()
+    ### CONFIG ###
+    dataset = get_dataset(input_root, valid_text)
 
     if not osp.exists(settings.input_dir):
         raise FileNotFoundError(f"{settings.input_dir} directory not exists.")
@@ -76,11 +78,6 @@ if __name__ == '__main__':
     root = os.path.dirname(os.path.realpath(__file__))
     data_config = parse_data_config(os.path.join(root, settings.config_path))
     classes = load_classes(os.path.join(root, "detection_api", data_config["names"]))
-    if not osp.exists(settings.input_dir):
-        raise FileNotFoundError(f"{settings.input_dir} directory not exists.")
-    os.makedirs(settings.output_dir, exist_ok=True)
-
-    dataset = utils.get_dataset(settings.input_dir)
 
     images = {}  # path: ImageClass
 
@@ -116,7 +113,7 @@ if __name__ == '__main__':
 
             for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
-                label = classes[int(labels[idx])]
+                label = int(labels[idx])
                 bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
                 img_info.bbox_list.append(bbox_info)
             images[image_path] = img_info
@@ -148,7 +145,7 @@ if __name__ == '__main__':
 
             for idx, bbox in enumerate(bboxes):
                 x1, y1, x2, y2, score = bbox
-                label = classes[0]  # Face
+                label = 0  # Face
                 bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
                 img_info.bbox_list.append(bbox_info)
             big_face_images[image_path] = img_info
