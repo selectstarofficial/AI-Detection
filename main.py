@@ -1,6 +1,8 @@
 from detection_api import Detector
 from detection_api.utils.parse_config import *
 from detection_api.utils.utils import *
+from face_detection_api.face_detection import FaceDetector
+from converge import converge_resuts
 import cv2
 import os
 import os.path as osp
@@ -74,7 +76,6 @@ if __name__ == '__main__':
 
             # get bbox result
             bboxes, labels = license_plate_api.detect(img)  # (x1, y1, x2, y2, score)
-            bboxes = utils.make_bbox_small(bboxes, settings.license_plate_bbox_width_ratio, settings.license_plate_bbox_height_ratio)
             bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
 
             for idx, bbox in enumerate(bboxes):
@@ -85,7 +86,42 @@ if __name__ == '__main__':
             images[image_path] = img_info
 
         global_img_id += 1
+    del license_plate_api
 
+    ### DETECT BIG FACE ###
+    print('Preparing Large Face Detector...')
+    face_detector = FaceDetector(settings)
+
+    big_face_images = {}
+    global_img_id = 0
+    for cls in dataset:
+        cls.image_paths = sorted(cls.image_paths)
+        for i, image_path in enumerate(cls.image_paths):
+            print('[{}/{}] {}'.format(i + 1, len(cls.image_paths), image_path))
+
+            img = np.array(Image.open(image_path).convert('RGB'))
+
+            img_height, img_width = img.shape[0:2]
+
+            # Register image info
+            img_info = ImageClass(global_img_id, image_path, img_width, img_height)
+
+            # get bbox result
+            bboxes = face_detector.detect(img)  # (x1, y1, x2, y2, score)
+            bboxes = utils.filter_too_big(bboxes, settings.max_size_ratio, img_width, img_height)
+
+            for idx, bbox in enumerate(bboxes):
+                x1, y1, x2, y2, score = bbox
+                label = classes[0]  # Face
+                bbox_info = BBoxClass(label, x1, y1, x2, y2, score)
+                img_info.bbox_list.append(bbox_info)
+            big_face_images[image_path] = img_info
+        global_img_id += 1
+    del face_detector
+
+    ### FILTER FACE DETECTION RESULTS ###
+    print('Converging results...')
+    images = converge_resuts(images, big_face_images)
 
     ### RENDERING RESULT ###
     print(f"Rendering result... save_img={settings.save_img}")
