@@ -5,19 +5,20 @@ import copy
 
 
 def converge_resuts(images: dict, big_face_images: dict):
-    iou_threshold = 0.1
-    results = {}
+    iou_threshold = 1e-7
+    results = copy.deepcopy(big_face_images)
     for path in images.keys():
-        results[path] = copy.deepcopy(big_face_images[path])
-
-        for big_face_result in big_face_images[path].bbox_list:
-            for images_result in images[path].bbox_list:
-                if images_result.label == 'face' or images_result.label == 0:
-                    iou = get_iou(big_face_result, images_result)
-                    if iou < iou_threshold:  # OK to save
+        if len(big_face_images[path].bbox_list) != 0:
+            for big_face_result in big_face_images[path].bbox_list:
+                for images_result in images[path].bbox_list:
+                    if images_result.label == 'face' or images_result.label == 0:
+                        iou = get_iou(big_face_result, images_result)
+                        if iou < iou_threshold:  # OK to save
+                            results[path].bbox_list.append(images_result)
+                    else:
                         results[path].bbox_list.append(images_result)
-                else:
-                    results[path].bbox_list.append(images_result)
+        else:
+            results[path] = copy.deepcopy(images[path])
 
     return results
 

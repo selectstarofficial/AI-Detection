@@ -49,7 +49,7 @@ def get_dataset(root, valid_text):
 
     return dataset
 
-is_server = False
+is_server = True
 if is_server:
     input_root = "../../dataset/bbox/custom/images/"
     valid_text = "../../dataset/bbox/custom/valid.txt"
@@ -155,7 +155,6 @@ if __name__ == '__main__':
     ### FILTER FACE DETECTION RESULTS ###
     print('Converging results...')
     images = converge_resuts(images, big_face_images)
-
 
     ### GENERATE RESULT FILE ###
     print("Start Writing Result File...")
