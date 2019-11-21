@@ -1,7 +1,7 @@
 # 얼굴/번호판 비식별화 프로그램
 ## 모델 및 기술 소개
 #### [기존 기술의 문제점]
-- [기존 오픈소스 모델](https://github.com/eriklindernoren/PyTorch-YOLOv3) 사용시 작은 물체들을 인식하지 못합니다
+- [기존 오픈소스 모델](https://github.com/yeephycho/tensorflow-face-detection) 사용시 작은 물체들을 인식하지 못합니다
 #### [해결방법]
 - 실제 한국에서 촬영된 약 4만장의 사진들을 YOLO v3 모델로 학습시켜 작은 물체를 효과적으로 찾아낼 수 있습니다<br>
 #### YOLO v3 모델 소개
