@@ -13,19 +13,30 @@
 ## 사용법
 1. 다음 링크를 통해 Anaconda 환경을 설치해줍니다. [설치 링크](https://docs.anaconda.com/anaconda/install/windows/)
 2. 다음 명령어를 통해 새로운 Anaconda 가상 환경을 만들고 Dependency 를 설치합니다.
-
     2.1. 리포지토리 위치로 이동
     ```bash
     cd [absolute_path_to_repository]
     ```
-    2.2. 새로운 Anaconda 가상 환경 생성 및 Dependency 설치
+    2.2. 패키지 설치
     ```bash
-    conda env create -f environment.yml
+    conda install tensorflow==1.14
     ```
-    2.3 새로운 Anaconda 가상 환경 실행
     ```bash
-    conda activate ml
+    conda install pytorch torchvision cpuonly -c pytorch
     ```
+    ```bash
+    conda install -c menpo opencv
+    ```
+    ```bash
+    pip install opencv-contrib-python
+    ```
+    ```bash
+    pip install --upgrade lxml
+    ```
+    ```bash
+    conda install matplotlib
+    ```
+    
 3. 얼굴/번호판 인식을 하고자 하는 사진을 ```input``` 폴더에 다음과 같은 파일 구조로 붙여넣습니다.
     ```
     Project Directory
