@@ -1,6 +1,5 @@
 <annotations>
   <image id="1" name="MP_SEL_015115.jpg" width="1920" height="1080">
-    <box label="face" xtl="1392.0" ytl="402.0" xbr="1464.0" ybr="486.0"/>
     <box label="car_plate" xtl="1016.9972" ytl="454.7531" xbr="1045.7351" ybr="462.48456"/>
     <box label="face" xtl="1254.2628" ytl="374.3949" xbr="1261.0497" ybr="384.28076"/>
     <box label="face" xtl="1242.9025" ytl="373.56363" xbr="1249.5107" ybr="382.5677"/>
@@ -13,6 +12,7 @@
     <box label="face" xtl="851.1159" ytl="401.80756" xbr="854.99084" ybr="407.05994"/>
     <box label="face" xtl="1169.6154" ytl="395.51605" xbr="1176.3446" ybr="405.52808"/>
     <box label="face" xtl="939.87555" ytl="398.6187" xbr="944.3491" ybr="404.80292"/>
+    <box label="face" xtl="1379.6483" ytl="424.20795" xbr="1393.9563" ybr="451.7741"/>
     <box label="face" xtl="845.15765" ytl="401.6047" xbr="849.11426" ybr="406.93307"/>
     <box label="face" xtl="968.4359" ytl="407.26163" xbr="974.11847" ybr="415.11548"/>
     <box label="face" xtl="928.9925" ytl="410.916" xbr="933.82574" ybr="417.51285"/>

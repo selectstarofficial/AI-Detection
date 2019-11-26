@@ -1,6 +1,5 @@
 <annotations>
   <image id="0" name="MP_SEL_004810.jpg" width="1920" height="1080">
-    <box label="face" xtl="618.0" ytl="482.0" xbr="661.0" ybr="525.0"/>
     <box label="car_plate" xtl="52.747192" ytl="559.0918" xbr="110.05651" ybr="573.5043"/>
     <box label="car_plate" xtl="295.4268" ytl="575.26385" xbr="354.17224" ybr="589.5558"/>
     <box label="face" xtl="898.1307" ytl="491.23743" xbr="907.20374" ybr="502.8523"/>
@@ -11,18 +10,22 @@
     <box label="face" xtl="698.4929" ytl="486.6316" xbr="708.8315" ybr="502.0141"/>
     <box label="face" xtl="921.013" ytl="485.93546" xbr="928.1779" ybr="496.38293"/>
     <box label="face" xtl="1080.9529" ytl="496.02206" xbr="1087.9628" ybr="506.01797"/>
+    <box label="face" xtl="650.0326" ytl="474.38333" xbr="667.1183" ybr="499.50092"/>
     <box label="face" xtl="1092.2444" ytl="495.6264" xbr="1098.9707" ybr="505.61554"/>
     <box label="car_plate" xtl="798.0848" ytl="524.1155" xbr="809.7808" ybr="530.05444"/>
     <box label="face" xtl="1103.507" ytl="496.32635" xbr="1110.7256" ybr="506.71442"/>
+    <box label="face" xtl="657.4512" ytl="466.88364" xbr="669.2074" ybr="483.5013"/>
     <box label="face" xtl="821.1141" ytl="498.64764" xbr="828.5918" ybr="508.66614"/>
     <box label="face" xtl="1118.7205" ytl="492.9886" xbr="1127.1685" ybr="504.85065"/>
     <box label="face" xtl="688.59406" ytl="483.50363" xbr="696.04755" ybr="495.78903"/>
     <box label="face" xtl="670.9675" ytl="472.40884" xbr="682.4641" ybr="488.97723"/>
+    <box label="face" xtl="630.34766" ytl="492.49954" xbr="650.31415" ybr="521.58813"/>
     <box label="face" xtl="811.1698" ytl="509.78625" xbr="820.7442" ybr="517.24866"/>
     <box label="face" xtl="909.0823" ytl="495.22922" xbr="916.39453" ybr="505.51373"/>
     <box label="face" xtl="826.69257" ytl="499.81833" xbr="834.4277" ybr="510.02795"/>
     <box label="face" xtl="834.5995" ytl="503.03183" xbr="841.5335" ybr="511.98154"/>
     <box label="face" xtl="1115.1339" ytl="486.98007" xbr="1123.352" ybr="498.0756"/>
+    <box label="face" xtl="636.3128" ytl="473.5894" xbr="650.9402" ybr="495.29807"/>
     <box label="face" xtl="910.8861" ytl="488.21652" xbr="917.3694" ybr="496.8453"/>
     <box label="face" xtl="1078.4816" ytl="490.2156" xbr="1083.8212" ybr="497.76166"/>
   </image>
