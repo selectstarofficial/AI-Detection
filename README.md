@@ -26,6 +26,7 @@ We have collected real-life images containing face and license-plate in cities o
 
 #### Classes Information
 This information will be specified in ```classes.names``` file within dataset root folder. Keep in mind when making your own dataset.
+
 Classes | Index
 ------------ | -------------
 Face | 0
@@ -33,13 +34,14 @@ License Plate | 1
 
 #### Statstics
 <b>Train</b>
-Categories | Info
+
 ------------ | -------------
 Total Number of Images | 34363
 Number of Face | 16950
 Number of License Plate | 62748
 
 <b>Validation</b>
+
 Categories | Info
 ------------ | -------------
 Total Number of Images | 5000
