@@ -5,22 +5,22 @@ Statistical machine learning models in general are very dependent on datasets. T
 ### Demo Results
 #### Input Image
 <p align="center">
-  <img src="./input/sample1/MP_SEL_004810.jpg" width="450" title="yolov3 architecture">
+  <img src="./input/sample1/MP_SEL_004810.jpg" width="650" title="yolov3 architecture">
 </p>
 
 #### Inferred Image
 <p align="center">
-  <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="450" title="yolov3 architecture">
+  <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="650" title="yolov3 architecture">
 </p>
 
 ## 1 Model Overview 
 Our model of choice is Yolo v3.
 ### What is YOLO v3 ?
 <p align="center">
-  <img src="./contents/yolov3_architecture.png" width="450" title="yolov3 architecture">
+  <img src="./contents/yolov3_architecture.png" width="600" title="yolov3 architecture">
 </p>
 <p align="center">
-  <img src="./contents/darknet.png" width="450" title="darknet architecture">
+  <img src="./contents/darknet.png" width="300" title="darknet architecture">
 </p>
 Yolo v3 is a very light and relatively accurate real-time object detection algorithm. It is a unified model which does not have region proposal stage thus able to detect objects faster. Also, this architecture predicts based on the whole image which benifits in encoding contextual information. Yolo v3 has Darknet-53 as feature extractor and scores 33 in AP metric.
 
@@ -44,7 +44,7 @@ Classes | Index
 Face | 0
 License Plate | 1
 
-#### Statstics
+### Statstics
 <b>Train</b>
 
 Categories | Info
