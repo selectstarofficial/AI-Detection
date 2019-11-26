@@ -1,25 +1,63 @@
-# 얼굴/번호판 비식별화 프로그램
-## 모델 및 기술 소개
-#### [기존 기술의 문제점]
-- [기존 오픈소스 모델](https://github.com/yeephycho/tensorflow-face-detection) 사용시 작은 물체들을 인식하지 못합니다
-#### [해결방법]
-- 실제 한국에서 촬영된 약 4만장의 사진들을 YOLO v3 모델로 학습시켜 작은 물체를 효과적으로 찾아낼 수 있습니다<br>
-#### YOLO v3 모델 소개
-대표적인 Real-Time Object Detection의 state-of-the-art 모델로 COCO 데이터셋을 학습시 30FPS 에 mAP 57.9% 의 성능을 자랑합니다
+# AI Face / License Plate Detection 
+## Introduction
+
+## 1. Model Overview 
+Our model of choice is Yolo v3.
+### What is YOLO v3 ?
+<p align="center">
+  <img src="./contents/yolov3_architecture.png" width="450" title="yolov3 architecture">
+</p>
+<p align="center">
+  <img src="./contents/darknet.png" width="450" title="darknet architecture">
+</p>
+Yolo v3 is a very light and relatively accurate real-time object detection algorithm. It is a unified model which does not have region proposal stage thus able to detect objects faster. Also, this architecture predicts based on the whole image which benifits in encoding contextual information. Yolo v3 has Darknet-53 as feature extractor and scores 33 in AP metric.
+
+#### Performance of YOLO v3
 <p align="center">
   <img src="./contents/yolov3.jpg" width="450" title="performance_image">
 </p>
 
-## 사용법
-1. 다음 링크를 통해 Anaconda 환경을 설치해줍니다. [설치 링크](https://docs.anaconda.com/anaconda/install/windows/)
-2. 다음 명령어를 통해 새로운 Anaconda 가상 환경을 만들고 Dependency 를 설치합니다.
+### Advantages of using YOLO v3 
+[Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 models are able to detect smaller objects.
+
+## 2. Dataset Overview
+We have collected real-life images containing face and license-plate in cities of South Korea. This dataset will provide to your model more contextual information of cities in South Korea. <br>
+[Link to Dataset]() : will be updated
+
+#### Classes Information
+This information will be specified in ```classes.names``` file within dataset root folder. Keep in mind when making your own dataset.
+Classes | Index
+------------ | -------------
+Face | 0
+License Plate | 1
+
+#### Statstics
+<b>Train</b>
+Categories | Info
+------------ | -------------
+Total Number of Images | 34363
+Number of Face | 16950
+Number of License Plate | 62748
+
+<b>Validation</b>
+Categories | Info
+------------ | -------------
+Total Number of Images | 5000
+Number of Face | 2499
+Number of License Plate | 8982
+
+
+## 3. Usage
+### 3.1 Setting Up the Environment
+1. Download Anaconda python environment via the link on the right. [Anaconda Download Link](https://docs.anaconda.com/anaconda/install/windows/)
+2. Download dependencies by typing in the following commands in your command line tool(CMD, Terminal ...) 
     
-    2.1. 리포지토리 위치로 이동
+    2.1. CD in to the downloaded repository.
     ```bash
     cd [absolute_path_to_repository]
     ```
     
-    2.2. 패키지 설치
+    2.2. Download packages by typing in following commands.
     ```bash
     conda install tensorflow==1.14
     ```
@@ -38,8 +76,9 @@
     ```bash
     conda install matplotlib
     ```
-    
-3. 얼굴/번호판 인식을 하고자 하는 사진을 ```input``` 폴더에 다음과 같은 파일 구조로 붙여넣습니다.
+
+### 3.2 Inferencing    
+1. Paste in the images that you want to infer in to the ```input``` folder in a format specified down below.
     ```
     Project Directory
         ├──input
@@ -51,18 +90,47 @@
         │   ├── folder_2
         │   └── ...
     ```
-4. 다음 명령어를 통해 프로그램을 실행시킵니다.
+2. Run the program by typing in following command.
     ```bash
     python main.py
     ```
-5. ```ouput``` 폴더에 결과가 출력됩니다.
+3. Inferred results are goin to be saved in ```output``` folder.
 
-## 성능
+### 3.3 Training with your own dataset
+1. Make you own dataset directory in following format
+    ```
+    Dataset Directory
+        ├──bbox dataset root
+        │   ├── images
+        │	│     ├── image_1.jpg
+        │	│	  ├── ...
+        │   │
+        │   ├── labels
+        │	│     ├── image_1.jpg.txt
+        │	│	  ├── ...
+    ```
+2. Paste your dataset (images and corresponding labels) like the structure above. Format of the dataset can be referred above in dataset section.
+3. Split dataset to Train/Validation and store information in a text file like the example below.
+	train.txt
+	```
+	image_1.jpg, image_1.jpg.txt
+	image_2.jpg, image_2.jpg.yxy
+	```
+4. Change train settings by updating ```./detection_api/settings.py``` file.
+5. Train
+	```bash
+	python train.py
+	```
+
+## Performance
+We have clearly shown the effectiveness of our re-trained model beating pre-trained Yolo-v3 by almost 5%. This has once agiain proven the importance of diverse dataset in order to train a robust prediction system.
+
 Class | AP
 ------------ | -------------
-Face | 38.43
-License Plate | 86.08
+Face | 38.43%
+License Plate | 86.08%
 
 Model | MAP
 ------------ | -------------
-Our Model | 62.25
+<b>Our's</b> | <b>62.25%</b>
+Pretrained Yolo v3 | 57.9%
