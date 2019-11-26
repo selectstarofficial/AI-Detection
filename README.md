@@ -1,7 +1,19 @@
 # AI Face / License Plate Detection 
 ## Introduction
+Statistical machine learning models in general are very dependent on datasets. The more diverse information the model can train, the most robust model you would get. This project provides real-life face and license plate photos taken in South Korea and has trained a robust detection model using Yolo v3.
 
-## 1. Model Overview 
+### Demo Results
+#### Input Image
+<p align="center">
+  <img src="./input/sample1/MP_SEL_004810.jpg" width="450" title="yolov3 architecture">
+</p>
+
+#### Inferred Image
+<p align="center">
+  <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="450" title="yolov3 architecture">
+</p>
+
+## 1 Model Overview 
 Our model of choice is Yolo v3.
 ### What is YOLO v3 ?
 <p align="center">
@@ -20,7 +32,7 @@ Yolo v3 is a very light and relatively accurate real-time object detection algor
 ### Advantages of using YOLO v3 
 [Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 models are able to detect smaller objects.
 
-## 2. Dataset Overview
+## 2 Dataset Overview
 We have collected real-life images containing face and license-plate in cities of South Korea. This dataset will provide to your model more contextual information of cities in South Korea. <br>
 [Link to Dataset]() : will be updated
 
@@ -35,6 +47,7 @@ License Plate | 1
 #### Statstics
 <b>Train</b>
 
+Categories | Info
 ------------ | -------------
 Total Number of Images | 34363
 Number of Face | 16950
@@ -49,7 +62,7 @@ Number of Face | 2499
 Number of License Plate | 8982
 
 
-## 3. Usage
+## 3 Usage
 ### 3.1 Setting Up the Environment
 1. Download Anaconda python environment via the link on the right. [Anaconda Download Link](https://docs.anaconda.com/anaconda/install/windows/)
 2. Download dependencies by typing in the following commands in your command line tool(CMD, Terminal ...) 
@@ -124,7 +137,7 @@ Number of License Plate | 8982
 	python train.py
 	```
 
-## Performance
+## 4 Performance
 We have clearly shown the effectiveness of our re-trained model beating pre-trained Yolo-v3 by almost 5%. This has once agiain proven the importance of diverse dataset in order to train a robust prediction system.
 
 Class | AP
