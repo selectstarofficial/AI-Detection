@@ -13,10 +13,12 @@
 ## 사용법
 1. 다음 링크를 통해 Anaconda 환경을 설치해줍니다. [설치 링크](https://docs.anaconda.com/anaconda/install/windows/)
 2. 다음 명령어를 통해 새로운 Anaconda 가상 환경을 만들고 Dependency 를 설치합니다.
+    
     2.1. 리포지토리 위치로 이동
     ```bash
     cd [absolute_path_to_repository]
     ```
+    
     2.2. 패키지 설치
     ```bash
     conda install tensorflow==1.14
