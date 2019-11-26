@@ -1,6 +1,6 @@
 # AI Face / License Plate Detection 
 ## Introduction
-Statistical machine learning models in general are very dependent on datasets. The more diverse information the model can train, the most robust model you would get. This project provides real-life face and license plate photos taken in South Korea and has trained a robust detection model using Yolo v3.
+Statistical machine learning models in general are very dependent on datasets. The more diverse information the model can train, the more robust model you would get. This project provides real-life face and license plate photos taken in South Korea and has trained a robust detection model using Yolo v3.
 
 ### Demo Results
 #### Input Image
@@ -13,8 +13,7 @@ Statistical machine learning models in general are very dependent on datasets. T
   <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="650" title="yolov3 architecture">
 </p>
 
-## 1 Model Overview 
-Our model of choice is Yolo v3.
+## 1. Model Overview 
 ### What is YOLO v3 ?
 <p align="center">
   <img src="./contents/yolov3_architecture.png" width="600" title="yolov3 architecture">
@@ -30,11 +29,11 @@ Yolo v3 is a very light and relatively accurate real-time object detection algor
 </p>
 
 ### Advantages of using YOLO v3 
-[Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 models are able to detect smaller objects.
+[Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 model is able to detect smaller objects.
 
-## 2 Dataset Overview
+## 2. Dataset Overview
 We have collected real-life images containing face and license-plate in cities of South Korea. This dataset will provide to your model more contextual information of cities in South Korea. <br>
-[Link to Dataset]() : will be updated
+[Link to Download Dataset]() : will be updated
 
 #### Classes Information
 This information will be specified in ```classes.names``` file within dataset root folder. Keep in mind when making your own dataset.
@@ -43,6 +42,15 @@ Classes | Index
 ------------ | -------------
 Face | 0
 License Plate | 1
+
+### Dataset File Format
+- Image : JPEG Images in 1920 * 1080 resolution
+- Label : Text file in following format
+	```
+	[label] [center_x] [center_y] [width] [height]
+	[label] [center_x] [center_y] [width] [height]
+	...
+	```
 
 ### Statstics
 <b>Train</b>
@@ -62,7 +70,7 @@ Number of Face | 2499
 Number of License Plate | 8982
 
 
-## 3 Usage
+## 3. Usage
 ### 3.1 Setting Up the Environment
 1. Download Anaconda python environment via the link on the right. [Anaconda Download Link](https://docs.anaconda.com/anaconda/install/windows/)
 2. Download dependencies by typing in the following commands in your command line tool(CMD, Terminal ...) 
@@ -137,7 +145,7 @@ Number of License Plate | 8982
 	python train.py
 	```
 
-## 4 Performance
+## 4. Performance
 We have clearly shown the effectiveness of our re-trained model beating pre-trained Yolo-v3 by almost 5%. This has once agiain proven the importance of diverse dataset in order to train a robust prediction system.
 
 Class | AP
@@ -147,5 +155,5 @@ License Plate | 86.08%
 
 Model | MAP
 ------------ | -------------
-<b>Our's</b> | <b>62.25%</b>
+<b>Ours</b> | <b>62.25%</b>
 Pretrained Yolo v3 | 57.9%
