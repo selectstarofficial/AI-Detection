@@ -146,7 +146,7 @@ Number of License Plate | 8982
 	```
 
 ## 4. Performance
-We have clearly shown the effectiveness of our re-trained model beating pre-trained Yolo-v3 by almost 5%. This has once agiain proven the importance of diverse dataset in order to train a robust prediction system.
+We have clearly shown the effectiveness of our re-trained model beating pre-trained Yolo-v3 by almost 5%. This has once again proven the importance of diverse dataset in order to train a robust prediction system.
 
 Class | AP
 ------------ | -------------
