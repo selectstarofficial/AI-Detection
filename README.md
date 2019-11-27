@@ -137,7 +137,7 @@ Number of License Plate | 8982
 	train.txt
 	```
 	image_1.jpg, image_1.jpg.txt
-	image_2.jpg, image_2.jpg.yxy
+	image_2.jpg, image_2.jpg.txt
 	```
 4. Change train settings by updating ```./detection_api/settings.py``` file.
 5. Train
