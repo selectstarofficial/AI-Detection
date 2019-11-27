@@ -28,7 +28,7 @@ Yolo v3 is a very light and relatively accurate real-time object detection algor
   <img src="./contents/yolov3.jpg" width="450" title="performance_image">
 </p>
 
-### Advantages of using YOLO v3 
+### Advantages of re-training YOLO v3
 [Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 model is able to detect smaller objects.
 
 ## 2. Dataset Overview
@@ -107,8 +107,8 @@ Number of License Plate | 8982
         ├──input
         │   ├── folder_1
         │	│     ├── image_1.jpg
-        │	│	  ├── image_2.jpg
-        │	│	  ├── ...
+        │	│     ├── image_2.jpg
+        │	│     ├── ...
         │   │
         │   ├── folder_2
         │   └── ...
@@ -126,11 +126,11 @@ Number of License Plate | 8982
         ├──bbox dataset root
         │   ├── images
         │	│     ├── image_1.jpg
-        │	│	  ├── ...
+        │	│     ├── ...
         │   │
         │   ├── labels
         │	│     ├── image_1.jpg.txt
-        │	│	  ├── ...
+        │	│     ├── ...
     ```
 2. Paste your dataset (images and corresponding labels) like the structure above. Format of the dataset can be referred above in dataset section.
 3. Split dataset to Train/Validation and store information in a text file like the example below.
