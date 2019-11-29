@@ -1,11 +1,12 @@
 # AI Face / License Plate Detection 
 ## Introduction
-Statistical machine learning models in general are very dependent on datasets. The more diverse information the model can train, the more robust model you would get. This project provides real-life face and license plate photos taken in South Korea and has trained a robust detection model using Yolo v3.
+Statistical machine learning models in general are very dependent on datasets. The more diverse information the model can train, the more robust model you would get. This project provides a robust detection model using Yolo v3 which was trained with real-life face and license plate photos taken in South Korea.
 
 ### Demo Results
 #### Input Image
+Note: Bounding boxes are filled because of security reasons.
 <p align="center">
-  <img src="./input/sample1/MP_SEL_004810.jpg" width="650" title="yolov3 architecture">
+  <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="650" title="yolov3 architecture">
 </p>
 
 #### Inferred Image
@@ -21,7 +22,7 @@ Statistical machine learning models in general are very dependent on datasets. T
 <p align="center">
   <img src="./contents/darknet.png" width="300" title="darknet architecture">
 </p>
-Yolo v3 is a very light and relatively accurate real-time object detection algorithm. It is a unified model which does not have region proposal stage thus able to detect objects faster. Also, this architecture predicts based on the whole image which benifits in encoding contextual information. Yolo v3 has Darknet-53 as feature extractor and scores 33 in AP metric.
+Yolo v3 is a very light and relatively accurate real-time object detection algorithm. It is a unified model which does not have region proposal stage thus able to detect objects faster. Also, this architecture predicts based on the whole image which benifits in encoding contextual information.
 
 #### Performance of YOLO v3
 <p align="center">
@@ -32,8 +33,7 @@ Yolo v3 is a very light and relatively accurate real-time object detection algor
 [Existing Pre-trained Models](https://github.com/yeephycho/tensorflow-face-detection) are not able to successfully detect small objects. With collecting and training real-life face and license plate images of South Korea, our newly trained YOLO v3 model is able to detect smaller objects.
 
 ## 2. Dataset Overview
-We have collected real-life images containing face and license-plate in cities of South Korea. This dataset will provide to your model more contextual information of cities in South Korea. <br>
-[Link to Download Dataset]() : will be updated
+We have collected real-life images containing face and license-plate in cities of South Korea. This dataset helped us provide our model more contextual information of cities in South Korea.
 
 #### Classes Information
 This information will be specified in ```classes.names``` file within dataset root folder. Keep in mind when making your own dataset.
