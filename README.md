@@ -4,12 +4,10 @@ Statistical machine learning models in general are very dependent on datasets. T
 
 ### Demo Results
 #### Input Image
-Note: Bounding boxes are filled because of security reasons.
-<p align="center">
-  <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="650" title="yolov3 architecture">
-</p>
+Note: Input Image was excluded because of security reasons.
 
 #### Inferred Image
+Note: Bounding boxes are filled because of security reasons.
 <p align="center">
   <img src="./output/sample1/MP_SEL_004810_detected.jpg" width="650" title="yolov3 architecture">
 </p>
